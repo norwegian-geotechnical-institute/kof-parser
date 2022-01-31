@@ -15,7 +15,7 @@ Latest releases see [CHANGES.md](CHANGES.md)
 
 ```bash
 
-pip install parse-kof
+pip install ngi-kof-parser
 
 ```
 
@@ -76,7 +76,10 @@ Build the package wheel:
 
 To publish the package to NGI's private Azure Artifacts repository set the following configuration: 
 
-    poetry config repositories.ngi https://pkgs.dev.azure.com/ngi001/_packaging/ngi001%40Local/pypi/simple/
+    # poetry config repositories.ngi https://pkgs.dev.azure.com/ngi001/_packaging/ngi001%40Local/pypi/simple/
+    # poetry config repositories.ngi https://pkgs.dev.azure.com/ngi001/_packaging/ngi001%40Local/pypi/upload
+#    poetry config repositories.ngi https://pkgs.dev.azure.com/ngi001/_packaging/ngi001/pypi/upload
+    poetry config repositories.ngi https://pkgs.dev.azure.com/ngi001/_packaging/ngi001%40Local/pypi/upload
 
 To publish the package to Azure Artifacts, make sure you have set up your NGI credentials.
 
@@ -87,6 +90,8 @@ for how to get a PAT via the Azure DevOps GUI. `Packaging (Read, write, & manage
 If you want to publish your newly built package you need to set your NGI credentials: 
 
     poetry config http-basic.ngi build <PAT>
+    poetry config pypi-token.ngi <PAT>
+    poetry config http-basic.ngi <your user name> <PAT>
 
     poetry publish -r ngi
 
