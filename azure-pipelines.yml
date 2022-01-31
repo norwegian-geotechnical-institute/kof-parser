@@ -9,15 +9,11 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-  strategy:
-    matrix:
-      Python39:
-        python.version: "3.9"
-
 steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: "$(python.version)"
+      versionSpec: "3.9"
+    displayName: "Use Python 3.9"
 
   - script: |
       python -m pip install --upgrade pip
