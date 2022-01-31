@@ -28,7 +28,7 @@ steps:
 
   - task: TwineAuthenticate@1
     inputs:
-      artifactFeed: "fieldmanager"
+      artifactFeed: "NGI%20Digital/fieldmanager"
 
   - script: |
       twine upload -r fieldmanager --config-file $(PYPIRC_PATH) dist/*.whl
