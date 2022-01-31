@@ -25,7 +25,7 @@ steps:
 
   - script: poetry version $(poetry version -s)-dev.$(Build.BuildId)
     displayName: "Add pre-release version"
-    condition: eq(variables['build.sourceBranch'], 'refs/heads/develop'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
 
   - script: |
       poetry build
