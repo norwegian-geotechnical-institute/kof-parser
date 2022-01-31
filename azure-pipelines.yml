@@ -4,30 +4,38 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-- develop
+  - develop
 
 pool:
   vmImage: ubuntu-latest
+
+  strategy:
+    matrix:
+      Python39:
+        python.version: "3.9"
+      Python310:
+        python.version: "3.10"
+
 steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '$(python.version)'
-    displayName: 'Use Python $(python.version)'
+      versionSpec: "$(python.version)"
+    displayName: "Use Python $(python.version)"
 
   - script: |
       python -m pip install --upgrade pip
       pip install poetry
       pip install twine
       poetry install --no-dev
-    displayName: 'Install dependencies'
+    displayName: "Install dependencies"
 
   - script: |
       poetry build
-    displayName: 'Build package'
+    displayName: "Build package"
 
   - task: TwineAuthenticate@1
     inputs:
-      artifactFeed: 'fieldmanager'
+      artifactFeed: "fieldmanager"
 
   - script: |
       twine upload -r fieldmanager --config-file $(PYPIRC_PATH) dist/*.whl
