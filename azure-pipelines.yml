@@ -20,8 +20,13 @@ steps:
       python -m pip install --upgrade pip
       pip install poetry
       pip install twine
-      poetry install --no-dev
+      poetry install
+    #     poetry install --no-dev
     displayName: "Install dependencies"
+
+  - script: |
+      poetry run pytest tests/ --cov my_project --cov-report html
+    displayName: "pytest"
 
   - script: poetry version $(poetry version -s)-dev.$(Build.BuildId)
     displayName: "Add pre-release version"
