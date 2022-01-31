@@ -5,6 +5,7 @@
 
 trigger:
   - develop
+  - main
 
 pool:
   vmImage: ubuntu-latest
@@ -21,6 +22,10 @@ steps:
       pip install twine
       poetry install --no-dev
     displayName: "Install dependencies"
+
+  - script: poetry version $(poetry version -s)-dev.$(Build.BuildId)
+    displayName: "Add pre-release version"
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/develop'))
 
   - script: |
       poetry build
