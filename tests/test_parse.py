@@ -1,4 +1,4 @@
-from parse_kof import KOFParser
+from ngi_kof_parser import KOFParser
 
 
 class TestParse:

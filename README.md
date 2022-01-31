@@ -22,16 +22,16 @@ pip install ngi-kof-parser
 ## Basic usage
 
 ```python
-from parse_kof import KOFParser
+from ngi_kof_parser import KOFParser
 
 parser = KOFParser()
 
 # ETRS89/NTM10:
-srid = 5110 
+srid = 5110
 locations = parser.parse('tests/data/test.kof', srid)
 
 for location in locations:
-    print(location)
+   print(location)
 
 # Output:
 # name='SMPLOC1' point_easting=112892.81 point_northing=1217083.64 point_z=1.0 srid=5110 methods=[]

@@ -7,7 +7,7 @@ from typing import List, Dict, Union
 import struct
 from operator import itemgetter
 
-from parse_kof import model
+from ngi_kof_parser import model
 
 
 #                   2251                                                  *Berg i dagen
