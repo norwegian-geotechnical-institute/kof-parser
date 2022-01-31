@@ -1,0 +1,35 @@
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    \.git
+  | venv
+  | \.venv
+  | env
+  | \.env
+  | _build
+  | build
+  | dist
+)/
+'''
+
+[tool.poetry]
+name = "ngi-kof-parser"
+version = "0.0.2"
+description = "Parser of KOF files. Follows Norkart's KOF 2.0 specification from 2005."
+authors = ["Jostein Leira <jostein@leira.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pydantic = "^1.9.0"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-azurepipelines = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
