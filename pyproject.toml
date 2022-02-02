@@ -15,7 +15,7 @@ exclude = '''
 
 [tool.poetry]
 name = "ngi-kof-parser"
-version = "0.0.3"
+version = "0.0.4"
 description = "Parser of KOF files. Follows Norkart's KOF 2.0 specification from 2005."
 authors = ["Jostein Leira <jostein@leira.net>"]
 readme = "README.md"
@@ -29,6 +29,7 @@ black = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-azurepipelines = "*"
+mypy = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
