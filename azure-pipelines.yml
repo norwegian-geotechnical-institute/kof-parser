@@ -28,7 +28,7 @@ steps:
     displayName: "mypy"
 
   - script: |
-      poetry run pytest tests/ --cov ngi_kof_parser --cov-report html
+      poetry run pytest tests/ --cov ngi_kof_parser --cov tests --cov-report html
     displayName: "pytest"
 
   - script: poetry version $(poetry version -s)-dev.$(Build.BuildId)
