@@ -2,8 +2,7 @@
 This is the parser service.
 """
 from io import StringIO
-from pathlib import Path
-from typing import List, Dict, Union
+from typing import List, Dict, Optional, Any
 import struct
 from operator import itemgetter
 
@@ -35,30 +34,45 @@ from ngi_kof_parser import model
 
 class KOFParser:
     tema_codes_mapping = {
-        "2401": model.MethodTypeEnum.RWS.name,
-        "2402": model.MethodTypeEnum.SA.name,
-        "2403": model.MethodTypeEnum.TP.name,
-        "2405": model.MethodTypeEnum.SS.name,
-        "2406": model.MethodTypeEnum.RP.name,
-        "2407": model.MethodTypeEnum.CPT.name,
-        "2409": model.MethodTypeEnum.RS.name,
-        "2410": model.MethodTypeEnum.SR.name,
-        "2411": model.MethodTypeEnum.SPT.name,
-        "2412": model.MethodTypeEnum.RCD.name,
-        "2413": model.MethodTypeEnum.PZ.name,
-        "2414": model.MethodTypeEnum.PT.name,
-        "2415": model.MethodTypeEnum.SVT.name,
-        "2417": model.MethodTypeEnum.INC.name,
-        "2418": model.MethodTypeEnum.TOT.name,
+        "2401": model.MethodTypeEnum.RWS,
+        "2402": model.MethodTypeEnum.SA,
+        "2403": model.MethodTypeEnum.TP,
+        "2405": model.MethodTypeEnum.SS,
+        "2406": model.MethodTypeEnum.RP,
+        "2407": model.MethodTypeEnum.CPT,
+        "2409": model.MethodTypeEnum.RS,
+        "2410": model.MethodTypeEnum.SR,
+        "2411": model.MethodTypeEnum.SPT,
+        "2412": model.MethodTypeEnum.RCD,
+        "2413": model.MethodTypeEnum.PZ,
+        "2414": model.MethodTypeEnum.PT,
+        "2415": model.MethodTypeEnum.SVT,
+        "2417": model.MethodTypeEnum.INC,
+        "2418": model.MethodTypeEnum.TOT,
     }
 
-    def temakode_to_method(self, temakode: str) -> str:
+    def __init__(self):
+        self.fieldspecs: List[List[Any]] = [
+            # Name, Start, Width, Type
+            ["ID", 5, 10, str],
+            ["TEMAKODE", 16, 8, str],
+            ["x", 25, 12, float],
+            ["y", 38, 11, float],
+            ["z", 50, 8, float],
+        ]
+        self.iname, self.istart, self.iwidth, self.itype = 0, 1, 2, 3  # field indexes
+        self.fieldspecs.sort(key=itemgetter(self.istart))
+        self.field_indices = range(len(self.fieldspecs))
+        self.struct_unpacker = self.get_struct_unpacker(self.fieldspecs, self.istart, self.iwidth)
+
+    def temakode_to_method(self, temakode: str) -> Optional[str]:
 
         if not temakode or temakode not in self.tema_codes_mapping.keys():
             return None
 
-        return self.tema_codes_mapping[temakode]
+        return self.tema_codes_mapping[temakode].name
 
+    @staticmethod
     def get_struct_unpacker(fieldspecs, istart, iwidth):
         """
         Build the format string for struct.unpack to use, based on the fieldspecs.
@@ -77,27 +91,11 @@ class KOFParser:
         struct_unpacker = struct.Struct(unpack_fmt).unpack_from
         return struct_unpacker
 
-    fieldspecs = [
-        # Name, Start, Width, Type
-        ["ID", 5, 10, str],
-        ["TEMAKODE", 16, 8, str],
-        ["x", 25, 12, float],
-        ["y", 38, 11, float],
-        ["z", 50, 8, float],
-    ]
-    iname, istart, iwidth, itype = 0, 1, 2, 3  # field indexes
-
-    fieldspecs.sort(key=itemgetter(istart))
-    struct_unpacker = get_struct_unpacker(fieldspecs, istart, iwidth)
-    field_indices = range(len(fieldspecs))
-
-    def parse(self, filepath_or_buffer: Union[str, Path, StringIO], srid:int)-> List[model.Location]:
+    def parse(self, filepath_or_buffer: Any, srid: int) -> List[model.Location]:
         if self._is_file_like(filepath_or_buffer):
             f = filepath_or_buffer
             close_file = False
         else:
-            # Read file with errors="replace" to catch UnicodeDecodeErrors
-            # f = open(filepath_or_buffer, "r", encoding='ASCII', errors="replace")
             f = open(filepath_or_buffer, "rb")
             close_file = True
         try:
@@ -107,12 +105,11 @@ class KOFParser:
                 f.close()
 
     def read_kof(self, file: StringIO, srid: int) -> List[model.Location]:
-        locations: Dict[model.Location] = {}
-        # data = codecs.getreader("iso-8859-1")(file)
+        locations: Dict[str, model.Location] = {}
         for line in file.readlines():
             if line[0:3] == b" 05":
                 raw_fields = self.struct_unpacker(line)  # split line into field values
-                line_data = {}
+                line_data: Dict[str, Any] = {}
                 for i in self.field_indices:
                     fieldspec = self.fieldspecs[i]
                     fieldname = fieldspec[self.iname]
@@ -137,7 +134,7 @@ class KOFParser:
         return [location for name, location in locations.items()]
 
     @staticmethod
-    def _is_file_like(obj):
+    def _is_file_like(obj) -> bool:
         """Check if object is file like
 
         Returns
@@ -146,11 +143,10 @@ class KOFParser:
             Return True if obj is file like, otherwise return False
         """
 
-        if not (hasattr(obj, 'read') or hasattr(obj, 'write')):
+        if not (hasattr(obj, "read") or hasattr(obj, "write")):
             return False
 
         if not hasattr(obj, "__iter__"):
             return False
 
         return True
-
