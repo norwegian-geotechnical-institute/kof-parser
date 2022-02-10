@@ -39,4 +39,4 @@ class MethodTypeEnum(str, Enum):
 
 class Location(LocationBase):
 
-    methods: List[Optional[MethodTypeEnum]] = []
+    methods: List[Optional[str]] = []

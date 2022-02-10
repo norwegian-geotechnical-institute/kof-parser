@@ -21,11 +21,14 @@ steps:
       pip install poetry
       pip install twine
       poetry install
-    #     poetry install --no-dev
     displayName: "Install dependencies"
 
   - script: |
-      poetry run pytest tests/ --cov ngi_kof_parser --cov-report html
+      poetry run mypy .
+    displayName: "mypy"
+
+  - script: |
+      poetry run pytest tests/ --cov ngi_kof_parser --cov tests --cov-report html
     displayName: "pytest"
 
   - script: poetry version $(poetry version -s)-dev.$(Build.BuildId)
