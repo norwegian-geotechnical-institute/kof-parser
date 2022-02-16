@@ -24,6 +24,10 @@ steps:
     displayName: "Install dependencies"
 
   - script: |
+      poetry run bandit -r src
+    displayName: "bandit"
+
+  - script: |
       poetry run mypy .
     displayName: "mypy"
 

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from enum import Enum
 from typing import Optional, List
 
@@ -39,4 +40,4 @@ class MethodTypeEnum(str, Enum):
 
 class Location(LocationBase):
 
-    methods: List[Optional[str]] = []
+    methods: List[str] = []

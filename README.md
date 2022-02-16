@@ -1,5 +1,7 @@
 # NGI KOF Parser
 
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
 This is the NGI Python package for parsing kof files.
 
 References:
@@ -21,6 +23,7 @@ pip install ngi-kof-parser
 
 ## Basic usage
 
+### Read a kof file
 ```python
 from ngi_kof_parser import KOFParser
 
@@ -42,6 +45,35 @@ for location in locations:
 # name='SMPLOC6' point_easting=112901.11 point_northing=1217069.56 point_z=0.0 srid=5110 methods=['PZ']
 # name='SMPLOC7' point_easting=1217069.56 point_northing=112901.11 point_z=0.0 srid=5110 methods=['PZ']
 
+```
+
+### Write a kof file
+
+```python
+from ngi_kof_parser import KOFWriter
+from ngi_kof_parser import Location
+
+kof_writer = KOFWriter()
+
+srid = 5110
+locations = [Location(name='SMPLOC1', point_easting=112892.81, point_northing=1217083.64, point_z=1.0),
+             Location(name='SMPLOC2', point_easting=112893.15, point_northing=1217079.46, point_z=2.0, methods=['TOT']),
+             Location(name='SMPLOC3',point_easting=112891.88, point_northing=1217073.01, point_z=0.0, methods=['CPT'])]
+ 
+kof_string = kof_writer.writeKOF(
+    project_id='project_id', project_name='cool-name', locations=locations, srid=srid
+)
+
+print(kof_string)
+# Output:
+# 00 KOF Export from NGI Field Manager
+# 00 Project: project_id. Name: cool-name
+# 00 Spatial Reference ID (SRID): 5110
+# 00 Export date (UTC): 2022-02-15 15:17:45.132721
+# 05 SMPLOC1             112892.810   1217083.640 1.000                
+# 05 SMPLOC2    2418     112893.150   1217079.460 2.000                
+# 05 SMPLOC3    2407     112891.880   1217073.010 0.000        
+#
 ```
 
 # Getting Started developing
