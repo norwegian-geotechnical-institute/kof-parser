@@ -1,0 +1,5 @@
+# This .gitattributes file primarily made for the test files. Some test files are deliberatly constructed with wrong
+# line endings for test purposes and should be specified here.
+
+# Don't let git modify the end-of-line characters:
+*.[Kk][Oo][Ff] binary

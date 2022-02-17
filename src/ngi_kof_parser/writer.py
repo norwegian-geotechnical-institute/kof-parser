@@ -2,11 +2,12 @@ from typing import List
 from datetime import datetime
 from uuid import UUID
 
-from ngi_kof_parser.model import Location
-from ngi_kof_parser.model import MethodTypeEnum
+from ngi_kof_parser import Kof
+from ngi_kof_parser import Location
+from ngi_kof_parser import MethodTypeEnum
 
 
-class KOFWriter:
+class KOFWriter(Kof):
 
     method_type_to_temakode = {
         MethodTypeEnum.RWS.name: "2401",
@@ -26,37 +27,41 @@ class KOFWriter:
         MethodTypeEnum.TOT.name: "2418",
     }
 
+    def __init__(self):
+        super().__init__()
+
+    def create_admin_block(self, project_name: str, srid: int) -> str:
+        """
+        # 00 Oppdrag Dato Ver K.sys Komm $11100000000 Observatør
+        # 01 EXP          31012022   2      22 0000 $22100000000           NN
+        """
+        date = datetime.utcnow().strftime("%d%m%Y")
+        version = "1"
+        code = self.get_code(srid=srid)
+        municipality = ""
+        units = "$21100000000"
+        observer = ""
+
+        #             "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
+        admin_block = " 00 Oppdrag      Dato     Ver K.sys   Komm $21100000000 Observer    \n"
+        admin_block += (
+            f" 01 {project_name[:12]:<12} {date[:8]:>8} {version[:3]:>3} {code:>7} "
+            f"{municipality:>4} {units[:12]:<12} {observer[:12]:<12}\n"
+        )
+        return admin_block
+
     @staticmethod
     def create_kof_coordinate_block(id: str, temakode: str, x: float, y: float, z: float) -> str:
-        coord_block = ""
-        coord_block += " "
-        coord_block += f"05"
-        coord_block += " "
-        coord_block += f"{id[0:10]:<10}"
-        coord_block += " "
-        coord_block += f"{temakode:<8}"
-        coord_block += " "
-        coord_block += f"{x:<12.3f}"
-        coord_block += " "
-        coord_block += f"{y:<11.3f}"
-        coord_block += " "
-        coord_block += f"{z:<8.3f}"
-        coord_block += " "
-        coord_block = f"{coord_block:<70}"
-        coord_block += "\n"
+        coord_block = f" 05 {id[0:10]:<10} {temakode:<8} {x:<12.3f} {y:<11.3f} {z:<8.3f} "
+        coord_block = f"{coord_block:<70}\n"
         return coord_block
 
     @staticmethod
     def create_kof_header_lines(project_id: UUID, project_name, srid: int) -> str:
-        header = ""
-        header += f" 00 KOF Export from NGI Field Manager"
-        header += "\n"
-        header += f" 00 Project: {project_id}. Name: {project_name}"
-        header += "\n"
-        header += f" 00 Spatial Reference ID (SRID): {srid}"
-        header += "\n"
-        header += f" 00 Export date (UTC): {datetime.utcnow()}"
-        header += "\n"
+        header = f" 00 KOF Export from NGI Field Manager\n"
+        header += f" 00 Project: {project_id}. Name: {project_name}\n"
+        header += f" 00 Spatial Reference ID (SRID): {srid}\n"
+        header += f" 00 Export date (UTC): {datetime.utcnow()}\n"
 
         return header
 
@@ -70,6 +75,7 @@ class KOFWriter:
         """For now, we do not do any transformation of locations positions"""
 
         kof_string = self.create_kof_header_lines(project_id=project_id, project_name=project_name, srid=srid)
+        kof_string += self.create_admin_block(project_name, srid=srid)
         for loc in locations:
 
             z = loc.point_z or 0

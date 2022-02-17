@@ -1,0 +1,61 @@
+﻿ETRS89-LAEA;Lambert Azimuthal Equal Area, ref INSPIRE Requirement 5  EPSG 3035;73;3035
+ETRS89-LCC;Lambert Conformal Conic basert på ETRS89,   EPSG 3034. ref INSPIRE Req 6. Brukes på pan-Europeiske data i små målestokker, opp til 1:500 000;74;3034
+EUREF89 Geografisk;Ingen projeksjon. EPSG 4258 (bredde, lengde), EPSG 4937 (bredde, lengde, ellipsoidisk høyde). Ref: INSPIRE Req 1;84;4937
+EUREF89 NTM Sone 10;Norsk Transversal Mercator sone 10 (basert på EUREF89)   EPSG 5110;210;5110
+EUREF89 NTM Sone 11;Norsk Transversal Mercator sone 11 (basert på EUREF89)   EPSG 5111;211;5111
+EUREF89 NTM Sone 12;Norsk Transversal Mercator sone 12 (basert på EUREF89)   EPSG 5112;212;5112
+EUREF89 NTM Sone 14;Norsk Transversal Mercator sone 14 (basert på EUREF89)   EPSG 5114;214;5114
+EUREF89 NTM Sone 15;Norsk Transversal Mercator sone 15 (basert på EUREF89)   EPSG 5115;215;5115
+EUREF89 NTM Sone 16;Norsk Transversal Mercator sone 16 (basert på EUREF89)   EPSG 5116;216;5116
+EUREF89 NTM Sone 17;Norsk Transversal Mercator sone 17 (basert på EUREF89)   EPSG 5117;217;5117
+EUREF89 NTM Sone 18;Norsk Transversal Mercator sone 18 (basert på EUREF89)   EPSG 5118;218;5118
+EUREF89 NTM Sone 19;Norsk Transversal Mercator sone 19 (basert på EUREF89)   EPSG 5119;219;5119
+EUREF89 NTM Sone 20;Norsk Transversal Mercator sone 20 (basert på EUREF89)   EPSG 5120;220;5120
+EUREF89 NTM Sone 21;Norsk Transversal Mercator sone 21 (basert på EUREF89)   EPSG 5121;221;5121
+EUREF89 NTM Sone 22;Norsk Transversal Mercator sone 22 (basert på EUREF89)   EPSG 5122;222;5122
+EUREF89 NTM Sone 23;Norsk Transversal Mercator sone 23 (basert på EUREF89)   EPSG 5123;223;5123
+EUREF89 NTM Sone 24;Norsk Transversal Mercator sone 24 (basert på EUREF89)   EPSG 5124;224;5124
+EUREF89 NTM Sone 25;Norsk Transversal Mercator sone 25 (basert på EUREF89)   EPSG 5125;225;5125
+EUREF89 NTM Sone 26;Norsk Transversal Mercator sone 26 (basert på EUREF89)   EPSG 5126;226;5126
+EUREF89 NTM Sone 27;Norsk Transversal Mercator sone 27 (basert på EUREF89)   EPSG 5127;227;5127
+EUREF89 NTM Sone 28;Norsk Transversal Mercator sone 28 (basert på EUREF89)   EPSG 5128;228;5128
+EUREF89 NTM Sone 29;Norsk Transversal Mercator sone 29 (basert på EUREF89)   EPSG 5129;229;5129
+EUREF89 NTM Sone 30;Norsk Transversal Mercator sone 30 (basert på EUREF89)   EPSG 5130;230;5130
+EUREF89 NTM Sone 5;Norsk Transversal Mercator sone 5 (basert på EUREF89)   EPSG 5105;205;5105
+EUREF89 NTM Sone 6;Norsk Transversal Mercator sone 6 (basert på EUREF89)   EPSG 5106;206;5106
+EUREF89 NTM Sone 7;Norsk Transversal Mercator sone 7 (basert på EUREF89)   EPSG 5107;207;5107
+EUREF89 NTM Sone 8;Norsk Transversal Mercator sone 8 (basert på EUREF89)   EPSG 5108;208;5108
+EUREF89 NTM Sone 9;Norsk Transversal Mercator sone 9 (basert på EUREF89)   EPSG 5109;209;5109
+EUREF89 UTM Sone 29 2d;UTM sone 29,2d basert på EUREF89, 2d, EPSG 25829. Ref INSPIRE Req 7 (ETRS89-TM29);19;25829
+EUREF89 UTM Sone 30 2d;UTM sone 30,2d basert på EUREF89, 2d, EPSG 25830. Ref INSPIRE Req 7 (ETRS89-TM30);20;25830
+EYREF89 NTM Sone 13;Norsk Transversal Mercator sone 13 (basert på EUREF89)   EPSG 5113;213;5113
+NGO-akse I, NGO1948,  Gauss-Krüger;NGO-akse I, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27391;1;27391
+NGO-akse II,  NGO1948, Gauss-Krüger;NGO-akse II, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27392;2;27392
+NGO-akse III, NGO1948, Gauss-Krüger;NGO-akse III, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27393;3;27393
+NGO-akse IV, NGO1948, Gauss-Krüger;NGO-akse IV, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27394;4;27394
+NGO-akse V, NGO1948, Gauss-Krüger;NGO-akse V, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27395;5;27395
+NGO-akse VI, NGO1948, Gauss-Krüger;NGO-akse VI, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27396;6;27396
+NGO-akse VII, NGO1948, Gauss-Krüger;NGO-akse VII, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27397;7;27397
+NGO-akse VIII, NGO1948, Gauss-Krüger;NGO-akse VIII, datum NGO1948, projeksjon Gauss-Krüger   EPSG 27398;8;27398
+NGO1948 , datum NGO1948, Geografisk;Ingen projeksjon    EPSG 4817;9;4817
+UTM sone 31 basert på ED50; EPSG 23031;31;23031
+UTM sone 31,basert på  EUREF89;Ref INSPIRE Req 7 (ETRS89-TM31)  EPSG 25831;21;25831
+UTM sone 32 basert på ED50; EPSG 23032;32;23032
+UTM sone 32 basert på EUREF89;Ref INSPIRE Req 7 (ETRS89-TM32)  EPSG 25832;22;25832
+UTM sone 33 basert på ED50; EPSG 23033;33;23033
+UTM sone 33 basert på EUREF89;Ref INSPIRE Req 7 (ETRS89-TM33))  EPSG 25833;23;25833
+UTM sone 34 basert på ED50; EPSG 23034;34;23034
+UTM sone 34 basert på EUREF89;Brukes vanligvis ikke i Norge fra 1998. )  EPSG 25834. Ref INSPIRE Req 7 (ETRS89-TM34);24;25834
+UTM sone 35 basert på ED50; EPSG 23035;35;23035
+UTM sone 35 basert på EUREF89;Ref INSPIRE Req 7 (ETRS89-TM35))  EPSG 25835;25;25835
+UTM sone 36 basert på ED50; EPSG 23036;36;23036
+UTM sone 36 basert på EUREF89;Ref INSPIRE Req 7 (ETRS89-TM36))  EPSG 25836;26;25836
+WGS84 Geografisk 2d;WGS84 Geografisk 2d, ingen projeksjon, EPSG 4326;184;4326
+WGS84 UTM 29 2d;UTM Sone 29 basert på WGS84,2d (horisontal), EPSG 32629;59;32629
+WGS84 UTM 30 2d;UTM Sone 30 basert på WGS84,2d (horisontal), EPSG 32630;60;32630
+WGS84 UTM 31 2d;UTM Sone 31 basert på WGS84,2d (horisontal), EPSG 32631;61;32631
+WGS84 UTM 32 2d;UTM Sone 32 basert på WGS84,2d (horisontal), EPSG 32632;62;32632
+WGS84 UTM 33 2d;UTM Sone 33 basert på WGS84,2d (horisontal), EPSG 32633;63;32633
+WGS84 UTM 34 2d;UTM Sone 34 basert på WGS84,2d (horisontal), EPSG 32634;64;32634
+WGS84 UTM 35 2d;UTM Sone 35 basert på WGS84,2d (horisontal), EPSG 32635;65;32635
+WGS84 UTM 36 2d;UTM Sone 36 basert på WGS84,2d (horisontal), EPSG 32636;66;32636

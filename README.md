@@ -69,11 +69,12 @@ print(kof_string)
 # 00 KOF Export from NGI Field Manager
 # 00 Project: project_id. Name: cool-name
 # 00 Spatial Reference ID (SRID): 5110
-# 00 Export date (UTC): 2022-02-15 15:17:45.132721
+# 00 Export date (UTC): 2022-02-17 13:23:43.204875
+# 00 Oppdrag      Dato     Ver K.sys   Komm $21100000000 Observer    
+# 01 cool-name    17022022   1     210      $21100000000             
 # 05 SMPLOC1             112892.810   1217083.640 1.000                
 # 05 SMPLOC2    2418     112893.150   1217079.460 2.000                
-# 05 SMPLOC3    2407     112891.880   1217073.010 0.000        
-#
+# 05 SMPLOC3    2407     112891.880   1217073.010 0.000                
 ```
 
 # Getting Started developing

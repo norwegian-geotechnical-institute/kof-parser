@@ -6,7 +6,7 @@ from typing import List, Dict, Optional, Any
 import struct
 from operator import itemgetter
 
-from ngi_kof_parser import model
+from ngi_kof_parser import model, Kof
 
 
 #                   2251                                                  *Berg i dagen
@@ -32,7 +32,7 @@ from ngi_kof_parser import model
 # //  05 TEST11     2430            0.000       0.000    0.000            *miljøprøvetaking
 
 
-class KOFParser:
+class KOFParser(Kof):
     tema_codes_mapping = {
         "2401": model.MethodTypeEnum.RWS,
         "2402": model.MethodTypeEnum.SA,
@@ -52,6 +52,7 @@ class KOFParser:
     }
 
     def __init__(self):
+        super().__init__()
         self.fieldspecs: List[List[Any]] = [
             # Name, Start, Width, Type
             ["ID", 5, 10, str],
@@ -60,20 +61,34 @@ class KOFParser:
             ["y", 38, 11, float],
             ["z", 50, 8, float],
         ]
+        self.admin_block_specification = [
+            # Name, Start, Width, Type
+            ["OPPDRAG", 5, 12, str],
+            ["DATO", 18, 8, str],
+            ["VERSJON", 27, 3, int],
+            ["KOORDSYS", 31, 7, str],
+            ["KOMMUNE", 39, 4, str],
+            ["ENHET", 44, 12, str],
+            ["OBERVATOR", 57, 12, str],
+        ]
         self.iname, self.istart, self.iwidth, self.itype = 0, 1, 2, 3  # field indexes
         self.fieldspecs.sort(key=itemgetter(self.istart))
         self.field_indices = range(len(self.fieldspecs))
         self.struct_unpacker = self.get_struct_unpacker(self.fieldspecs, self.istart, self.iwidth)
+        self.adminblock_unpacker = self.get_struct_unpacker(self.admin_block_specification, self.istart, self.iwidth)
+        self.field_adminblock_indices = range(len(self.admin_block_specification))
+        self.useEastNorthOrderAsDefault = True
+        self.epsgNum = None
 
-    def temakode_to_method(self, temakode: str) -> Optional[str]:
+    def temakode_to_method(self, code: str) -> Optional[str]:
 
-        if not temakode or temakode not in self.tema_codes_mapping.keys():
+        if not code or code not in self.tema_codes_mapping.keys():
             return None
 
-        return self.tema_codes_mapping[temakode].name
+        return self.tema_codes_mapping[code].name
 
     @staticmethod
-    def get_struct_unpacker(fieldspecs, istart, iwidth):
+    def get_struct_unpacker(field_specification, index_start, index_width):
         """
         Build the format string for struct.unpack to use, based on the fieldspecs.
         fieldspecs is a list of [name, start, width] arrays.
@@ -81,9 +96,9 @@ class KOFParser:
         """
         unpack_len = 0
         unpack_fmt = ""
-        for fieldspec in fieldspecs:
-            start = fieldspec[istart] - 1
-            end = start + fieldspec[iwidth]
+        for field_specification in field_specification:
+            start = field_specification[index_start] - 1
+            end = start + field_specification[index_width]
             if start > unpack_len:
                 unpack_fmt += str(start - unpack_len) + "x"
             unpack_fmt += str(end - start) + "s"
@@ -123,6 +138,9 @@ class KOFParser:
                 if line_data["ID"] not in locations.keys():
                     locations[line_data["ID"]] = model.Location(name=line_data["ID"])
 
+                if not self.useEastNorthOrderAsDefault:
+                    line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
+
                 locations[line_data["ID"]].point_easting = line_data["x"]
                 locations[line_data["ID"]].point_northing = line_data["y"]
                 locations[line_data["ID"]].point_z = line_data["z"]
@@ -130,6 +148,29 @@ class KOFParser:
 
                 if new_method := self.temakode_to_method(line_data["TEMAKODE"]):
                     locations[line_data["ID"]].methods.append(new_method)
+            elif line[0:3] == b" 01":
+                raw_fields = self.adminblock_unpacker(line)  # split line into field values
+                line_data = {}
+                for i in self.field_adminblock_indices:
+                    fieldspec = self.admin_block_specification[i]
+                    fieldname = fieldspec[self.iname]
+                    cast = fieldspec[self.itype]
+                    value = cast(raw_fields[i].decode().strip())
+                    if value == "":
+                        line_data[fieldname] = None
+                    else:
+                        line_data[fieldname] = value
+                code = line_data["KOORDSYS"]
+                if code:
+                    self.epsgNum = self.get_srid(code)
+
+                enhet = line_data["ENHET"]
+                if enhet:
+                    dirSpec = enhet[1:2]
+                    if dirSpec == "1":
+                        self.useEastNorthOrderAsDefault = False
+                    elif dirSpec == "2":
+                        self.useEastNorthOrderAsDefault = True
 
         return [location for name, location in locations.items()]
 
