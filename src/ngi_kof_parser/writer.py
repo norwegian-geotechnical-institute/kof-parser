@@ -10,6 +10,7 @@ from ngi_kof_parser import MethodTypeEnum
 class KOFWriter(Kof):
 
     method_type_to_temakode = {
+        MethodTypeEnum.RO.name: "2251",
         MethodTypeEnum.RWS.name: "2401",
         MethodTypeEnum.SA.name: "2402",
         MethodTypeEnum.TP.name: "2403",
@@ -86,7 +87,7 @@ class KOFWriter(Kof):
                 for method in loc.methods:
                     kof_string += self.create_kof_coordinate_block(
                         id=loc.name,
-                        temakode=self.method_type_to_temakode[method],
+                        temakode=self.method_type_to_temakode.get(method, ""),
                         x=x,
                         y=y,
                         z=z,

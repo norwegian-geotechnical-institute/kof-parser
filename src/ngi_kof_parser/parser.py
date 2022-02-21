@@ -1,7 +1,8 @@
 """
 This is the parser service.
 """
-from io import StringIO
+import logging
+from io import BytesIO
 from typing import List, Dict, Optional, Any
 import struct
 from operator import itemgetter
@@ -9,7 +10,7 @@ from operator import itemgetter
 from ngi_kof_parser import model, Kof
 
 
-#                   2251                                                  *Berg i dagen
+#                   2251                                                  *Berg i dagen (RO/F)
 # //  05 TEST1      2401            0.000       0.000    0.000            *dreiesondering RWS
 # //  05 TEST10     2402            0.000       0.000    0.000            *prøvetaking    SA
 #                   2403                                                  *prøvegrop TP
@@ -34,21 +35,30 @@ from ngi_kof_parser import model, Kof
 
 class KOFParser(Kof):
     tema_codes_mapping = {
+        "2251": model.MethodTypeEnum.RO,
+        "F": model.MethodTypeEnum.RO,
         "2401": model.MethodTypeEnum.RWS,
         "2402": model.MethodTypeEnum.SA,
         "2403": model.MethodTypeEnum.TP,
+        # 2404
         "2405": model.MethodTypeEnum.SS,
         "2406": model.MethodTypeEnum.RP,
         "2407": model.MethodTypeEnum.CPT,
+        # 2408
         "2409": model.MethodTypeEnum.RS,
         "2410": model.MethodTypeEnum.SR,
         "2411": model.MethodTypeEnum.SPT,
         "2412": model.MethodTypeEnum.RCD,
         "2413": model.MethodTypeEnum.PZ,
+        "GVR": model.MethodTypeEnum.PZ,
         "2414": model.MethodTypeEnum.PT,
         "2415": model.MethodTypeEnum.SVT,
+        "VB": model.MethodTypeEnum.SVT,
+        # 2416
         "2417": model.MethodTypeEnum.INC,
         "2418": model.MethodTypeEnum.TOT,
+        # 2419
+        # 2430 has many uses, could be mapped to the OTHER method type?
     }
 
     def __init__(self):
@@ -61,7 +71,7 @@ class KOFParser(Kof):
             ["y", 38, 11, float],
             ["z", 50, 8, float],
         ]
-        self.admin_block_specification = [
+        self.admin_block_specification: List[List[Any]] = [
             # Name, Start, Width, Type
             ["OPPDRAG", 5, 12, str],
             ["DATO", 18, 8, str],
@@ -78,9 +88,9 @@ class KOFParser(Kof):
         self.adminblock_unpacker = self.get_struct_unpacker(self.admin_block_specification, self.istart, self.iwidth)
         self.field_adminblock_indices = range(len(self.admin_block_specification))
         self.useEastNorthOrderAsDefault = True
-        self.epsgNum = None
+        self.file_srid = None
 
-    def temakode_to_method(self, code: str) -> Optional[str]:
+    def tema_code_to_method(self, code: str) -> Optional[str]:
 
         if not code or code not in self.tema_codes_mapping.keys():
             return None
@@ -106,7 +116,21 @@ class KOFParser(Kof):
         struct_unpacker = struct.Struct(unpack_fmt).unpack_from
         return struct_unpacker
 
-    def parse(self, filepath_or_buffer: Any, srid: int) -> List[model.Location]:
+    def parse(self, filepath_or_buffer: Any, result_srid: int, file_srid: Optional[int] = None) -> List[model.Location]:
+        """
+        Parse passed kof file. Resulting locations are returned in the `result_srid` coordinate system.
+
+        The file may or may not contain a specification of what coordinate system its coordinates are in.
+
+        If `file_srid` is passed in, it specifies what coordinate system the file's coordinates are in.
+        The `file_srid` parameter will override any coordinate system that is specified in the file. If `file_srid`
+        is not passed or is `None`, then the coordinate system specified in the KOF file is used. If neither
+        `file_srid` nor any coordinate system is specified in the KOF file, then the coordinate system is assumed to be
+        in the `result_srid` coordinate system and no transformations are done.
+
+        For now result_srid and file_srid must be equal and no transformations are done. This limitation will change in
+        the future, when this package has the ability to do transformations.
+        """
         if self._is_file_like(filepath_or_buffer):
             f = filepath_or_buffer
             close_file = False
@@ -114,26 +138,22 @@ class KOFParser(Kof):
             f = open(filepath_or_buffer, "rb")
             close_file = True
         try:
-            return self.read_kof(f, srid=srid)
+            return self._read_kof(f, result_srid=result_srid, file_srid=file_srid)
         finally:
             if close_file:
                 f.close()
 
-    def read_kof(self, file: StringIO, srid: int) -> List[model.Location]:
+    def _read_kof(self, file: BytesIO, result_srid: int, file_srid: Optional[int]) -> List[model.Location]:
         locations: Dict[str, model.Location] = {}
+        if file_srid:
+            self.file_srid = file_srid
+        else:
+            self.file_srid = result_srid
+
         for line in file.readlines():
             if line[0:3] == b" 05":
                 raw_fields = self.struct_unpacker(line)  # split line into field values
-                line_data: Dict[str, Any] = {}
-                for i in self.field_indices:
-                    fieldspec = self.fieldspecs[i]
-                    fieldname = fieldspec[self.iname]
-                    cast = fieldspec[self.itype]
-                    value = cast(raw_fields[i].decode().strip())
-                    if value == "":
-                        line_data[fieldname] = None
-                    else:
-                        line_data[fieldname] = value
+                line_data = self.extract_line(raw_fields, self.fieldspecs, self.field_indices)
 
                 if line_data["ID"] not in locations.keys():
                     locations[line_data["ID"]] = model.Location(name=line_data["ID"])
@@ -141,28 +161,27 @@ class KOFParser(Kof):
                 if not self.useEastNorthOrderAsDefault:
                     line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
 
+                if result_srid != self.file_srid:
+                    # TODO: Implement transforming from file_srid to result_srid
+                    logging.warning(f"ngi-kof-parser {result_srid=} and {self.file_srid=} are not equal!")
+                    raise Exception(
+                        f"ngi-kof-parser {result_srid=} and {file_srid=} are not equal! "
+                        f"Do not support coordinate system transformations yet!"
+                    )
+
                 locations[line_data["ID"]].point_easting = line_data["x"]
                 locations[line_data["ID"]].point_northing = line_data["y"]
                 locations[line_data["ID"]].point_z = line_data["z"]
-                locations[line_data["ID"]].srid = srid
+                locations[line_data["ID"]].srid = result_srid
 
-                if new_method := self.temakode_to_method(line_data["TEMAKODE"]):
+                if new_method := self.tema_code_to_method(line_data["TEMAKODE"]):
                     locations[line_data["ID"]].methods.append(new_method)
             elif line[0:3] == b" 01":
                 raw_fields = self.adminblock_unpacker(line)  # split line into field values
-                line_data = {}
-                for i in self.field_adminblock_indices:
-                    fieldspec = self.admin_block_specification[i]
-                    fieldname = fieldspec[self.iname]
-                    cast = fieldspec[self.itype]
-                    value = cast(raw_fields[i].decode().strip())
-                    if value == "":
-                        line_data[fieldname] = None
-                    else:
-                        line_data[fieldname] = value
+                line_data = self.extract_line(raw_fields, self.admin_block_specification, self.field_adminblock_indices)
                 code = line_data["KOORDSYS"]
-                if code:
-                    self.epsgNum = self.get_srid(code)
+                if code and not file_srid:
+                    self.file_srid = self.get_srid(code)
 
                 enhet = line_data["ENHET"]
                 if enhet:
@@ -173,6 +192,20 @@ class KOFParser(Kof):
                         self.useEastNorthOrderAsDefault = True
 
         return [location for name, location in locations.items()]
+
+    def extract_line(self, raw_fields, fieldspecs, indices) -> Dict[str, Any]:
+        line_data: dict[str, Any] = {}
+        for i in indices:
+            fieldspec = fieldspecs[i]
+            fieldname = fieldspec[self.iname]
+            cast = fieldspec[self.itype]
+            value = cast(raw_fields[i].decode().strip())
+            if value == "":
+                line_data[fieldname] = None
+            else:
+                line_data[fieldname] = value
+
+        return line_data
 
     @staticmethod
     def _is_file_like(obj) -> bool:

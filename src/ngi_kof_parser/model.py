@@ -1,4 +1,3 @@
-from decimal import Decimal
 from enum import Enum
 from typing import Optional, List
 
@@ -25,17 +24,24 @@ class MethodTypeEnum(str, Enum):
     RP = "RP"
     SA = "SA"
     PZ = "PZ"
-    ESA = "ESA"
     SS = "SS"
     RWS = "RWS"
-    TP = "TP"
-    RS = "RS"
-    SR = "SR"
-    SPT = "SPT"
     RCD = "RCD"
-    PT = "PT"
+    RS = "RS"
     SVT = "SVT"
+    SPT = "SPT"
+    CD = "CD"
+    TP = "TP"
+    PT = "PT"
+    ESA = "ESA"
+    EP = "EP"
+    AD = "AD"
+    RO = "RO"
     INC = "INC"
+    SR = "SR"
+    IW = "IW"
+    DT = "DT"
+    OTHER = "OTHER"
 
 
 class Location(LocationBase):

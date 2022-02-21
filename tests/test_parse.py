@@ -31,7 +31,7 @@ class TestParse:
 
         assert kof_srid == proj_srid, "For now, the parser does not project any positions"
 
-        locations = parser.parse(file_name, kof_srid)
+        locations = parser.parse(file_name, proj_srid, kof_srid)
 
         assert len(locations) == 1
 
@@ -40,6 +40,11 @@ class TestParse:
         assert location.point_northing == ex_n, "X and Y not swapped"
         assert location.point_z == ex_z
         assert location.srid == proj_srid
+
+        # Until we handle transformations, we expect an Exception here:
+        new_srid = 23032
+        with pytest.raises(Exception):
+            parser.parse(file_name, new_srid)
 
     @pytest.mark.parametrize("file", ["tests/data/import_template.kof", open("tests/data/import_template.kof", "rb")])
     def test_upload_kof(self, file):

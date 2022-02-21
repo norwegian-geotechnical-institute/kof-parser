@@ -31,7 +31,9 @@ parser = KOFParser()
 
 # ETRS89/NTM10:
 srid = 5110
-locations = parser.parse('tests/data/test.kof', srid)
+# Please note that the parser do not handle any coordinate system transformations,
+# so you need to use the same input and output SRIDs (for now).
+locations = parser.parse('tests/data/test.kof', result_srid=srid, file_srid=srid)
 
 for location in locations:
    print(location)
