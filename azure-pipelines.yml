@@ -19,7 +19,7 @@ steps:
   - task: PipAuthenticate@1
     displayName: 'Pip Authenticate'
     inputs:
-      artifactFeeds: 'fieldmanager'
+      artifactFeeds: 'ngi001, fieldmanager'
       onlyAddExtraIndex: True
 
 
