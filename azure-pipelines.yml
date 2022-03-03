@@ -29,7 +29,6 @@ steps:
       pip install twine
       poetry install
     displayName: "Install dependencies"
-    arguments: --build-arg INDEX_URL=$(PIP_EXTRA_INDEX_URL)"
 
   - script: |
       poetry run bandit -r src
