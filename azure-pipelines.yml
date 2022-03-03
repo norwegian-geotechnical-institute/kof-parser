@@ -27,9 +27,10 @@ steps:
       python -m pip install --upgrade pip
       pip install poetry
       pip install twine
-      # poetry install
-      poetry export -f requirements.txt --output requirements.txt --without-hashes --dev
-      pip install -r requirements.txt
+      export repositories.ngi-fm=$(PIP_EXTRA_INDEX_URL)
+      poetry install
+#      poetry export -f requirements.txt --output requirements.txt --without-hashes --dev
+#      pip install -r requirements.txt
     displayName: "Install dependencies"
 
   - script: |
