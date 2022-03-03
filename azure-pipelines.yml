@@ -19,7 +19,7 @@ steps:
   - task: PipAuthenticate@1
     displayName: 'Pip Authenticate'
     inputs:
-      artifactFeeds: 'ngi001, fieldmanager'
+      artifactFeeds: fieldmanager
       onlyAddExtraIndex: True
 
 
@@ -29,6 +29,7 @@ steps:
       pip install twine
       poetry install
     displayName: "Install dependencies"
+    arguments: --build-arg INDEX_URL=$(PIP_EXTRA_INDEX_URL)"
 
   - script: |
       poetry run bandit -r src
