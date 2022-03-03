@@ -20,6 +20,8 @@ steps:
     displayName: 'Pip Authenticate'
     inputs:
       artifactFeeds: 'fieldmanager'
+      onlyAddExtraIndex: True
+
 
   - script: |
       python -m pip install --upgrade pip
