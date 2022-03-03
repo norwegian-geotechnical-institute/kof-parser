@@ -159,7 +159,7 @@ python-versions = "*"
 
 [[package]]
 name = "ngi-projector"
-version = "0.0.2.dev8108"
+version = "0.0.2.dev8131"
 description = "Project points from one projection to another using pyproj"
 category = "main"
 optional = false
@@ -362,7 +362,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "334bdedb299cd5b3f153c2a0bd19f6ffb506a0e0061462d483b6e06ab1e618f3"
+content-hash = "ae45c9f7aa43882973fd157e0dbeeb83cb0eaa6ba895a4fb39635d78397d2fc6"
 
 [metadata.files]
 atomicwrites = [
@@ -496,7 +496,7 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
 ngi-projector = [
-    {file = "ngi_projector-0.0.2.dev8108-py3-none-any.whl", hash = "sha256:22486a6147b25f39bd91df5284737674cd3ed25db6ad91fbfdbf3ed808ada219"},
+    {file = "ngi_projector-0.0.2.dev8131-py3-none-any.whl", hash = "sha256:daf856dfef62aed768c02d3a4f7e3b0f4397d729abeee72b15ebde64b292a918"},
 ]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
