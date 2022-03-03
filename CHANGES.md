@@ -1,10 +1,11 @@
 # NGI Python KOF Parser Package
 
 ## Version 0.0.6
-_2022-02-21_
+_2022-03-02_
 
 Add
 
+- Add transformations.
 - Support for more methods. Complete list:        
    - RO: 2251
    - RW: 2401

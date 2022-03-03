@@ -17,34 +17,41 @@ class TestParse:
     @pytest.mark.parametrize(
         "file_name, ex_e, ex_n, ex_z,kof_srid,proj_srid",
         [
+            # No transformations
             ("tests/data/UTM32_EN.kof", 594137.802, 6589107.923, 0.000, 25832, 25832),
             ("tests/data/UTM32_NE.kof", 594137.802, 6589107.923, 0.000, 25832, 25832),
-            ("tests/data/UTM33_EN.kof", 253851.717, 6595967.833, 0.000, 23033, 23033),
-            ("tests/data/UTM33_NE.kof", 253851.717, 6595967.833, 0.000, 23033, 23033),
+            ("tests/data/UTM33_EN.kof", 253851.717, 6595967.833, 0.000, 25833, 25833),
+            ("tests/data/UTM33_NE.kof", 253851.717, 6595967.833, 0.000, 25833, 25833),
+            # No transformations, read file coordinate system from file
+            ("tests/data/UTM32_EN.kof", 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM32_NE.kof", 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM33_EN.kof", 253851.717, 6595967.833, 0.000, None, 25833),
+            ("tests/data/UTM33_NE.kof", 253851.717, 6595967.833, 0.000, None, 25833),
+            # Actual transformation
+            ("tests/data/UTM32_EN.kof", 253851.72, 6595967.83, 0.000, None, 25833),
+            ("tests/data/UTM32_NE.kof", 253851.72, 6595967.83, 0.000, None, 25833),
+            ("tests/data/UTM33_EN.kof", 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM33_NE.kof", 594137.802, 6589107.923, 0.000, None, 25832),
         ],
     )
     def test_upload_kof_with_proj_and_meta(self, file_name, ex_e, ex_n, ex_z, kof_srid, proj_srid):
         """
         Test uploading kof file
+
+        EPSG:23033 ED50 / UTM zone 33N
+        EPSG:25833 ETRS89 / UTM zone 33N
         """
         parser = KOFParser()
 
-        assert kof_srid == proj_srid, "For now, the parser does not project any positions"
-
-        locations = parser.parse(file_name, proj_srid, kof_srid)
+        locations = parser.parse(file_name, result_srid=proj_srid, file_srid=kof_srid)
 
         assert len(locations) == 1
 
         [location] = locations
-        assert location.point_easting == ex_e, "X and Y not swapped"
-        assert location.point_northing == ex_n, "X and Y not swapped"
+        assert location.point_easting == pytest.approx(ex_e)
+        assert location.point_northing == pytest.approx(ex_n)
         assert location.point_z == ex_z
         assert location.srid == proj_srid
-
-        # Until we handle transformations, we expect an Exception here:
-        new_srid = 23032
-        with pytest.raises(Exception):
-            parser.parse(file_name, new_srid)
 
     @pytest.mark.parametrize("file", ["tests/data/import_template.kof", open("tests/data/import_template.kof", "rb")])
     def test_upload_kof(self, file):

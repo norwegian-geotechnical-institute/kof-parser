@@ -83,15 +83,40 @@ print(kof_string)
 
 1. Software dependencies
 
-   - Python 3.9 or higher
-   - Poetry
-   - black code formatter
-
 2. Clone this repository
 
 3. Install
 
-   `poetry install`
+## Software dependencies
+
+Before you start, install:
+
+   - Python 3.9 or higher
+   - Poetry
+   - black code formatter
+   
+## Clone this repository
+
+Use git to clone this repository.
+
+## Install
+
+There are several combinations of how to set up a local development environment.
+
+We use Poetry for dependency management. See [Install poetry](https://python-poetry.org/docs/) if needed.
+
+To set up a local development environment on you local machine, make sure you have set up your NGI credentials.
+You need to generate Personal Access Token (PAT). Follow
+[this guide](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate)
+for how to get a PAT via the Azure DevOps GUI. `Packaging (Read)` access is sufficient.
+
+After generating the PAT, run this command:
+
+    poetry config http-basic.ngi-fm build <PAT>
+
+Then, from the project root folder run:
+
+    poetry install
 
 
 

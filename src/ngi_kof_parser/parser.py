@@ -7,8 +7,11 @@ from typing import List, Dict, Optional, Any
 import struct
 from operator import itemgetter
 
+from ngi_projector import Projector
+
 from ngi_kof_parser import model, Kof
 
+projector = Projector()
 
 #                   2251                                                  *Berg i dagen (RO/F)
 # //  05 TEST1      2401            0.000       0.000    0.000            *dreiesondering RWS
@@ -162,12 +165,8 @@ class KOFParser(Kof):
                     line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
 
                 if result_srid != self.file_srid:
-                    # TODO: Implement transforming from file_srid to result_srid
-                    logging.warning(f"ngi-kof-parser {result_srid=} and {self.file_srid=} are not equal!")
-                    raise Exception(
-                        f"ngi-kof-parser {result_srid=} and {file_srid=} are not equal! "
-                        f"Do not support coordinate system transformations yet!"
-                    )
+                    transformer = projector.get_transformer(f"{self.file_srid}-{result_srid}")
+                    line_data["x"], line_data["y"] = projector.transform(transformer, line_data["x"], line_data["y"])
 
                 locations[line_data["ID"]].point_easting = line_data["x"]
                 locations[line_data["ID"]].point_northing = line_data["y"]
@@ -181,7 +180,7 @@ class KOFParser(Kof):
                 line_data = self.extract_line(raw_fields, self.admin_block_specification, self.field_adminblock_indices)
                 code = line_data["KOORDSYS"]
                 if code and not file_srid:
-                    self.file_srid = self.get_srid(code)
+                    self.file_srid = self.get_srid(int(code))
 
                 enhet = line_data["ENHET"]
                 if enhet:
