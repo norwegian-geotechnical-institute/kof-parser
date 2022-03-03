@@ -19,7 +19,6 @@ steps:
   - task: PipAuthenticate@1
     displayName: 'Pip Authenticate'
     inputs:
-#      artifactFeeds: '277b2f77-691a-4d92-bd89-8e7cac121676/fieldmanager'
       artifactFeeds: "NGI Digital/fieldmanager"
       onlyAddExtraIndex: True
 
@@ -28,10 +27,7 @@ steps:
       python -m pip install --upgrade pip
       pip install poetry
       pip install twine
-#      poetry config repositories.ngi-fm $(PIP_EXTRA_INDEX_URL)
       poetry install
-#      poetry export -f requirements.txt --output requirements.txt --without-hashes --dev
-#      pip install -r requirements.txt
     displayName: "Install dependencies"
 
   - script: |
