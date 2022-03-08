@@ -1,5 +1,7 @@
 # NGI KOF Parser
 
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
 This is the NGI Python package for parsing kof files.
 
 References:
@@ -21,6 +23,7 @@ pip install ngi-kof-parser
 
 ## Basic usage
 
+### Read a kof file
 ```python
 from ngi_kof_parser import KOFParser
 
@@ -28,7 +31,9 @@ parser = KOFParser()
 
 # ETRS89/NTM10:
 srid = 5110
-locations = parser.parse('tests/data/test.kof', srid)
+# Please note that the parser do not handle any coordinate system transformations,
+# so you need to use the same input and output SRIDs (for now).
+locations = parser.parse('tests/data/test.kof', result_srid=srid, file_srid=srid)
 
 for location in locations:
    print(location)
@@ -44,19 +49,74 @@ for location in locations:
 
 ```
 
+### Write a kof file
+
+```python
+from ngi_kof_parser import KOFWriter
+from ngi_kof_parser import Location
+
+kof_writer = KOFWriter()
+
+srid = 5110
+locations = [Location(name='SMPLOC1', point_easting=112892.81, point_northing=1217083.64, point_z=1.0),
+             Location(name='SMPLOC2', point_easting=112893.15, point_northing=1217079.46, point_z=2.0, methods=['TOT']),
+             Location(name='SMPLOC3',point_easting=112891.88, point_northing=1217073.01, point_z=0.0, methods=['CPT'])]
+ 
+kof_string = kof_writer.writeKOF(
+    project_id='project_id', project_name='cool-name', locations=locations, srid=srid
+)
+
+print(kof_string)
+# Output:
+# 00 KOF Export from NGI Field Manager
+# 00 Project: project_id. Name: cool-name
+# 00 Spatial Reference ID (SRID): 5110
+# 00 Export date (UTC): 2022-02-17 13:23:43.204875
+# 00 Oppdrag      Dato     Ver K.sys   Komm $21100000000 Observer    
+# 01 cool-name    17022022   1     210      $21100000000             
+# 05 SMPLOC1             112892.810   1217083.640 1.000                
+# 05 SMPLOC2    2418     112893.150   1217079.460 2.000                
+# 05 SMPLOC3    2407     112891.880   1217073.010 0.000                
+```
+
 # Getting Started developing
 
 1. Software dependencies
-
-   - Python 3.9 or higher
-   - Poetry
-   - black code formatter
 
 2. Clone this repository
 
 3. Install
 
-   `poetry install`
+## Software dependencies
+
+Before you start, install:
+
+   - Python 3.9 or higher
+   - Poetry
+   - black code formatter
+   
+## Clone this repository
+
+Use git to clone this repository.
+
+## Install
+
+There are several combinations of how to set up a local development environment.
+
+We use Poetry for dependency management. See [Install poetry](https://python-poetry.org/docs/) if needed.
+
+To set up a local development environment on you local machine, make sure you have set up your NGI credentials.
+You need to generate Personal Access Token (PAT). Follow
+[this guide](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate)
+for how to get a PAT via the Azure DevOps GUI. `Packaging (Read)` access is sufficient.
+
+After generating the PAT, run this command:
+
+    poetry config http-basic.ngi-fm build <PAT>
+
+Then, from the project root folder run:
+
+    poetry install
 
 
 
