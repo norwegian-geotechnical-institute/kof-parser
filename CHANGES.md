@@ -5,6 +5,7 @@ _2022-03-02_
 
 Add
 
+- Use new ngi-projector version 0.0.3. 
 - Add transformations.
 - Support for more methods. Complete list:        
    - RO: 2251

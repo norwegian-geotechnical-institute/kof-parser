@@ -1,7 +1,6 @@
 """
 This is the parser service.
 """
-import logging
 from io import BytesIO
 from typing import List, Dict, Optional, Any
 import struct
@@ -91,7 +90,7 @@ class KOFParser(Kof):
         self.adminblock_unpacker = self.get_struct_unpacker(self.admin_block_specification, self.istart, self.iwidth)
         self.field_adminblock_indices = range(len(self.admin_block_specification))
         self.useEastNorthOrderAsDefault = True
-        self.file_srid = None
+        self.file_srid: Optional[int] = None
 
     def tema_code_to_method(self, code: str) -> Optional[str]:
 
@@ -130,9 +129,6 @@ class KOFParser(Kof):
         is not passed or is `None`, then the coordinate system specified in the KOF file is used. If neither
         `file_srid` nor any coordinate system is specified in the KOF file, then the coordinate system is assumed to be
         in the `result_srid` coordinate system and no transformations are done.
-
-        For now result_srid and file_srid must be equal and no transformations are done. This limitation will change in
-        the future, when this package has the ability to do transformations.
         """
         if self._is_file_like(filepath_or_buffer):
             f = filepath_or_buffer
@@ -164,9 +160,10 @@ class KOFParser(Kof):
                 if not self.useEastNorthOrderAsDefault:
                     line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
 
-                if result_srid != self.file_srid:
-                    transformer = projector.get_transformer(f"{self.file_srid}-{result_srid}")
-                    line_data["x"], line_data["y"] = projector.transform(transformer, line_data["x"], line_data["y"])
+                if self.file_srid and result_srid != self.file_srid:
+                    line_data["x"], line_data["y"] = projector.transform(
+                        self.file_srid, result_srid, line_data["x"], line_data["y"]
+                    )
 
                 locations[line_data["ID"]].point_easting = line_data["x"]
                 locations[line_data["ID"]].point_northing = line_data["y"]

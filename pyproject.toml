@@ -28,7 +28,7 @@ secondary = true
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = "^1.9.0"
-ngi-projector = "0.0.2.dev8131"
+ngi-projector = "^0.0.3"
 
 [tool.poetry.dev-dependencies]
 black = "*"

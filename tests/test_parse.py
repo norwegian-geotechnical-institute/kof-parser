@@ -15,7 +15,7 @@ class TestParse:
             assert location.srid
 
     @pytest.mark.parametrize(
-        "file_name, ex_e, ex_n, ex_z,kof_srid,proj_srid",
+        "file_name, ex_e, ex_n, ex_z, kof_srid, proj_srid",
         [
             # No transformations
             ("tests/data/UTM32_EN.kof", 594137.802, 6589107.923, 0.000, 25832, 25832),
