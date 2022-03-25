@@ -15,7 +15,7 @@ exclude = '''
 
 [tool.poetry]
 name = "ngi-kof-parser"
-version = "0.0.6"
+version = "0.0.7"
 description = "Parser of KOF files. Follows Norkart's KOF 2.0 specification from 2005."
 authors = ["Jostein Leira <jostein@leira.net>"]
 readme = "README.md"

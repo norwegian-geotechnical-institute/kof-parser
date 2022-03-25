@@ -25,6 +25,11 @@ class TestWrite:
         assert "05 SMPLOC2    2418     112893.150   1217079.460 2.000" in kof_string
 
     def test_write_all_method_types(self):
+        """
+        Write all method types to kof file.
+
+        Some (nine) method types does not have a kof code.
+        """
         writer = KOFWriter()
         header = (
             " 00 KOF sample file from NGI Field Manager\r\n" " 00 Spatial Reference ID (SRID): 5110 (ETRS89/NTM10)\r\n"
@@ -43,7 +48,7 @@ class TestWrite:
 
         [location1, location2] = locations
         assert len(location1.methods) == 0
-        assert len(location2.methods) == len(MethodTypeEnum) + 3 - 7
+        assert len(location2.methods) == len(MethodTypeEnum) + 3 - 9
         assert (
             len([method for method in location2.methods if method == "OTHER"]) == 0
-        ), "There are seven methods we do not have a tema code for and are therefore mapped to 2430 OTHER"
+        ), "There are nine methods we do not have a tema code for and are therefore mapped to 2430 OTHER"
