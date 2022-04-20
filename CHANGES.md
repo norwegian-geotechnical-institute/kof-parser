@@ -1,13 +1,5 @@
 # NGI Python KOF Parser Package
 
-## Version 0.0.7
-_2022-03-25_
-
-Change
-
-- PZ is split into three specialized PZE (electronic), PZH (hydraulic) and PZS (standpipe) methods.
-
-
 ## Version 0.0.6
 _2022-03-02_
 

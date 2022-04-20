@@ -89,7 +89,7 @@ class TestParse:
         assert location7.point_z == locaction7_orig_pos_z
 
         for method in location7.methods:
-            assert method == MethodTypeEnum.PZE
+            assert method == MethodTypeEnum.PZ
 
     @pytest.mark.parametrize(
         "file, expected_exception",
