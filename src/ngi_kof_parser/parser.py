@@ -118,7 +118,13 @@ class KOFParser(Kof):
         struct_unpacker = struct.Struct(unpack_fmt).unpack_from
         return struct_unpacker
 
-    def parse(self, filepath_or_buffer: Any, result_srid: int, file_srid: Optional[int] = None) -> List[model.Location]:
+    def parse(
+        self,
+        filepath_or_buffer: Any,
+        result_srid: int,
+        file_srid: Optional[int] = None,
+        swap_easting_northing: Optional[bool] = False,
+    ) -> List[model.Location]:
         """
         Parse passed kof file. Resulting locations are returned in the `result_srid` coordinate system.
 
@@ -129,6 +135,9 @@ class KOFParser(Kof):
         is not passed or is `None`, then the coordinate system specified in the KOF file is used. If neither
         `file_srid` nor any coordinate system is specified in the KOF file, then the coordinate system is assumed to be
         in the `result_srid` coordinate system and no transformations are done.
+
+        If the swap_easting_northing parameter is set to True, then the easting and northing values are swapped before
+        any transformation is done.
         """
         if self._is_file_like(filepath_or_buffer):
             f = filepath_or_buffer
@@ -137,12 +146,16 @@ class KOFParser(Kof):
             f = open(filepath_or_buffer, "rb")
             close_file = True
         try:
-            return self._read_kof(f, result_srid=result_srid, file_srid=file_srid)
+            return self._read_kof(
+                f, result_srid=result_srid, file_srid=file_srid, swap_easting_northing=swap_easting_northing
+            )
         finally:
             if close_file:
                 f.close()
 
-    def _read_kof(self, file: BytesIO, result_srid: int, file_srid: Optional[int]) -> List[model.Location]:
+    def _read_kof(
+        self, file: BytesIO, result_srid: int, file_srid: Optional[int], swap_easting_northing: Optional[bool] = False
+    ) -> List[model.Location]:
         locations: Dict[str, model.Location] = {}
         if file_srid:
             self.file_srid = file_srid
@@ -158,6 +171,9 @@ class KOFParser(Kof):
                     locations[line_data["ID"]] = model.Location(name=line_data["ID"])
 
                 if not self.useEastNorthOrderAsDefault:
+                    line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
+
+                if swap_easting_northing:
                     line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
 
                 if self.file_srid and result_srid != self.file_srid:

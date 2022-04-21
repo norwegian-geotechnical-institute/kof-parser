@@ -32,6 +32,16 @@ class TestParse:
             ("tests/data/UTM32_NE.kof", 253851.72, 6595967.83, 0.000, None, 25833),
             ("tests/data/UTM33_EN.kof", 594137.802, 6589107.923, 0.000, None, 25832),
             ("tests/data/UTM33_NE.kof", 594137.802, 6589107.923, 0.000, None, 25832),
+            # Regression test for failed transformation
+            # No transformation since the source data is in ETRS89/UTM 32N SRID 25832 (SOSI coordinate system 22)
+            ("tests/data/Innmålt_UTM32.kof", 6644804.528, 595870.665, 50.029, None, 25832),
+            ("tests/data/Innmålt_UTM32.kof", 6644804.528, 595870.665, 50.029, 25832, 25832),
+            # Transformation from the source data ETRS89/UTM 32N -> UTM 33 (SRID 25833, SOSI 23)
+            ("tests/data/Innmålt_UTM32.kof", 5696353.09, 535410.87, 50.029, None, 25833),
+            ("tests/data/Innmålt_UTM32.kof", 5696353.09, 535410.87, 50.029, 25832, 25833),
+            # Transformation from the source data ETRS89/UTM 32N -> ED50 UTM 31 (SRID 23031, SOSI 31)
+            ("tests/data/Innmålt_UTM32.kof", 7712335.00, 680539.85, 50.029, None, 23031),
+            ("tests/data/Innmålt_UTM32.kof", 7712335.00, 680539.85, 50.029, 25832, 23031),
         ],
     )
     def test_upload_kof_with_proj_and_meta(self, file_name, ex_e, ex_n, ex_z, kof_srid, proj_srid):
