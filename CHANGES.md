@@ -1,4 +1,10 @@
 # NGI Python KOF Parser Package
+## Version 0.0.8
+_2022-08-08_
+
+Add
+
+- Refractoring to support most encodings in input files
 
 ## Version 0.0.7
 _2022-04-20_

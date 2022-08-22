@@ -29,6 +29,7 @@ secondary = true
 python = "^3.9"
 pydantic = "^1.9.0"
 ngi-projector = "^0.0.3"
+cchardet = "^2.1.7"
 
 [tool.poetry.dev-dependencies]
 black = "*"

@@ -1,14 +1,18 @@
 """
 This is the parser service.
 """
-from io import BytesIO
-from typing import List, Dict, Optional, Any
+from io import BytesIO, TextIOWrapper
+from typing import List, Dict, Optional, Any, Union, overload
+from typing_extensions import Literal
 import struct
 from operator import itemgetter
+import cchardet as chardet
 
 from ngi_projector import Projector
 
-from ngi_kof_parser import model, Kof
+from ngi_kof_parser import Kof
+from ngi_kof_parser.model import Location
+from ngi_kof_parser.enums import MethodType
 
 projector = Projector()
 
@@ -37,59 +41,35 @@ projector = Projector()
 
 class KOFParser(Kof):
     tema_codes_mapping = {
-        "2251": model.MethodTypeEnum.RO,
-        "F": model.MethodTypeEnum.RO,
-        "2401": model.MethodTypeEnum.RWS,
-        "2402": model.MethodTypeEnum.SA,
-        "2403": model.MethodTypeEnum.TP,
+        "2251": MethodType.RO,
+        "F": MethodType.RO,
+        "2401": MethodType.RWS,
+        "2402": MethodType.SA,
+        "2403": MethodType.TP,
         # 2404
-        "2405": model.MethodTypeEnum.SS,
-        "2406": model.MethodTypeEnum.RP,
-        "2407": model.MethodTypeEnum.CPT,
+        "2405": MethodType.SS,
+        "2406": MethodType.RP,
+        "2407": MethodType.CPT,
         # 2408
-        "2409": model.MethodTypeEnum.RS,
-        "2410": model.MethodTypeEnum.SR,
-        "2411": model.MethodTypeEnum.SPT,
-        "2412": model.MethodTypeEnum.RCD,
-        "2413": model.MethodTypeEnum.PZ,
-        "GVR": model.MethodTypeEnum.PZ,
-        "2414": model.MethodTypeEnum.PT,
-        "2415": model.MethodTypeEnum.SVT,
-        "VB": model.MethodTypeEnum.SVT,
+        "2409": MethodType.RS,
+        "2410": MethodType.SR,
+        "2411": MethodType.SPT,
+        "2412": MethodType.RCD,
+        "2413": MethodType.PZ,
+        "GVR": MethodType.PZ,
+        "2414": MethodType.PT,
+        "2415": MethodType.SVT,
+        "VB": MethodType.SVT,
         # 2416
-        "2417": model.MethodTypeEnum.INC,
-        "2418": model.MethodTypeEnum.TOT,
+        "2417": MethodType.INC,
+        "2418": MethodType.TOT,
         # 2419
         # 2430 has many uses, could be mapped to the OTHER method type?
     }
 
     def __init__(self):
         super().__init__()
-        self.fieldspecs: List[List[Any]] = [
-            # Name, Start, Width, Type
-            ["ID", 5, 10, str],
-            ["TEMAKODE", 16, 8, str],
-            ["x", 25, 12, float],
-            ["y", 38, 11, float],
-            ["z", 50, 8, float],
-        ]
-        self.admin_block_specification: List[List[Any]] = [
-            # Name, Start, Width, Type
-            ["OPPDRAG", 5, 12, str],
-            ["DATO", 18, 8, str],
-            ["VERSJON", 27, 3, int],
-            ["KOORDSYS", 31, 7, str],
-            ["KOMMUNE", 39, 4, str],
-            ["ENHET", 44, 12, str],
-            ["OBERVATOR", 57, 12, str],
-        ]
-        self.iname, self.istart, self.iwidth, self.itype = 0, 1, 2, 3  # field indexes
-        self.fieldspecs.sort(key=itemgetter(self.istart))
-        self.field_indices = range(len(self.fieldspecs))
-        self.struct_unpacker = self.get_struct_unpacker(self.fieldspecs, self.istart, self.iwidth)
-        self.adminblock_unpacker = self.get_struct_unpacker(self.admin_block_specification, self.istart, self.iwidth)
-        self.field_adminblock_indices = range(len(self.admin_block_specification))
-        self.useEastNorthOrderAsDefault = True
+        self.use_east_north_order_as_default = True
         self.file_srid: Optional[int] = None
 
     def tema_code_to_method(self, code: str) -> Optional[str]:
@@ -99,24 +79,39 @@ class KOFParser(Kof):
 
         return self.tema_codes_mapping[code].name
 
-    @staticmethod
-    def get_struct_unpacker(field_specification, index_start, index_width):
-        """
-        Build the format string for struct.unpack to use, based on the fieldspecs.
-        fieldspecs is a list of [name, start, width] arrays.
-        Returns a string like "6s2s3s7x7s4x9s".
-        """
-        unpack_len = 0
-        unpack_fmt = ""
-        for field_specification in field_specification:
-            start = field_specification[index_start] - 1
-            end = start + field_specification[index_width]
-            if start > unpack_len:
-                unpack_fmt += str(start - unpack_len) + "x"
-            unpack_fmt += str(end - start) + "s"
-            unpack_len = end
-        struct_unpacker = struct.Struct(unpack_fmt).unpack_from
-        return struct_unpacker
+
+    def map_line_to_coordinate_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> Location:
+        resolved_location = Location()
+        template_coordinate_block: str = "-05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM"
+        parsed_line = line[0: len(template_coordinate_block)]
+
+        resolved_location.name = parsed_line[4:15].strip()
+        resolved_location.srid = result_srid
+        resolved_location.point_easting = float(parsed_line[24:37].strip())
+        resolved_location.point_northing = float(parsed_line[37:49].strip())
+        resolved_location.point_z = float(parsed_line[49:58].strip())
+        new_method = self.tema_code_to_method(parsed_line[15:24].strip())
+        if resolved_location.methods is not None:
+            resolved_location.methods += [new_method] if new_method is not None else []
+
+        return resolved_location
+
+
+    def map_line_to_administrative_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> None:
+        template_admin_block: str = "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
+        parsed_line = line[0: len(template_admin_block)]
+        coordinate_system = parsed_line[30:38].strip()
+        if coordinate_system and not file_srid:
+            self.file_srid = self.get_srid(int(coordinate_system))
+        units = parsed_line[43:56]
+        if units:
+            dir_spec = units[1:2]
+            if dir_spec == "1":
+                self.use_east_north_order_as_default = False
+            elif dir_spec == "2":
+                self.use_east_north_order_as_default = True
+
+        return
 
     def parse(
         self,
@@ -124,7 +119,7 @@ class KOFParser(Kof):
         result_srid: int,
         file_srid: Optional[int] = None,
         swap_easting_northing: Optional[bool] = False,
-    ) -> List[model.Location]:
+    ) -> List[Location]:
         """
         Parse passed kof file. Resulting locations are returned in the `result_srid` coordinate system.
 
@@ -155,69 +150,72 @@ class KOFParser(Kof):
 
     def _read_kof(
         self, file: BytesIO, result_srid: int, file_srid: Optional[int], swap_easting_northing: Optional[bool] = False
-    ) -> List[model.Location]:
-        locations: Dict[str, model.Location] = {}
+    ) -> List[Location]:
+        locations: Dict[str, Location] = {}
+        resolved_locations: List[Location] = []
         if file_srid:
             self.file_srid = file_srid
         else:
             self.file_srid = result_srid
 
-        for line in file.readlines():
-            if line[0:3] == b" 05":
-                raw_fields = self.struct_unpacker(line)  # split line into field values
-                line_data = self.extract_line(raw_fields, self.fieldspecs, self.field_indices)
+        self.encoding = self.detect_char_set_from_file(file)
+        wrapper = TextIOWrapper(file, encoding=self.encoding)
+        lines = wrapper.readlines()
+        for line in lines:
+            if " 01" in line:
+                self.map_line_to_administrative_block(line, result_srid, file_srid)
 
-                if line_data["ID"] not in locations.keys():
-                    locations[line_data["ID"]] = model.Location(name=line_data["ID"])
+            elif " 05" in line:
+                location = self.map_line_to_coordinate_block(line, result_srid, file_srid)
 
-                if not self.useEastNorthOrderAsDefault:
-                    line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
-
-                if swap_easting_northing:
-                    line_data["x"], line_data["y"] = line_data["y"], line_data["x"]
+                if not self.use_east_north_order_as_default or swap_easting_northing:
+                    location.point_easting, location.point_northing = location.point_northing, location.point_easting
 
                 if self.file_srid and result_srid != self.file_srid:
-                    line_data["x"], line_data["y"] = projector.transform(
-                        self.file_srid, result_srid, line_data["x"], line_data["y"]
+                    if location.point_easting and location.point_northing:
+                        location.point_easting, location.point_northing = projector.transform(
+                            self.file_srid, result_srid, location.point_easting, location.point_northing
+                        )
+
+                if len(resolved_locations) > 0:
+                    existing_locations = list(
+                        filter(lambda existing: location.name == existing.name, resolved_locations)
                     )
+                    if len(existing_locations) > 0:
+                        existing_location = next(
+                            existing_location
+                            for existing_location in existing_locations
+                            if existing_location.name == location.name
+                        )
+                        if existing_location is not None:
+                            if existing_location.methods is None:
+                                existing_location.methods = []
+                            existing_location.methods += location.methods if location.methods is not None else []
+                            existing_location.point_easting = location.point_easting
+                            existing_location.point_northing = location.point_northing
+                            existing_location.point_z = location.point_z
+                    else:
+                        resolved_locations.append(location)
+                else:
+                    resolved_locations.append(location)
 
-                locations[line_data["ID"]].point_easting = line_data["x"]
-                locations[line_data["ID"]].point_northing = line_data["y"]
-                locations[line_data["ID"]].point_z = line_data["z"]
-                locations[line_data["ID"]].srid = result_srid
+        return resolved_locations
 
-                if new_method := self.tema_code_to_method(line_data["TEMAKODE"]):
-                    locations[line_data["ID"]].methods.append(new_method)
-            elif line[0:3] == b" 01":
-                raw_fields = self.adminblock_unpacker(line)  # split line into field values
-                line_data = self.extract_line(raw_fields, self.admin_block_specification, self.field_adminblock_indices)
-                code = line_data["KOORDSYS"]
-                if code and not file_srid:
-                    self.file_srid = self.get_srid(int(code))
+    def detect_char_set_from_file(
+        self, file: BytesIO, default_char_set: str = "iso-8859-15", confidence: float = 0.70
+    ) -> str:
+        sample = file.read()
+        detection = chardet.detect(sample)
+        if detection["confidence"] < confidence:
+            encoding = default_char_set
+        else:
+            encoding = detection["encoding"]
+        file.seek(0)
+        if encoding == "ASCII":
+            # Since iso-8859-15 is a superset of ascii, just return that, even if ascii was detected
+            return "iso-8859-15"
 
-                enhet = line_data["ENHET"]
-                if enhet:
-                    dirSpec = enhet[1:2]
-                    if dirSpec == "1":
-                        self.useEastNorthOrderAsDefault = False
-                    elif dirSpec == "2":
-                        self.useEastNorthOrderAsDefault = True
-
-        return [location for name, location in locations.items()]
-
-    def extract_line(self, raw_fields, fieldspecs, indices) -> Dict[str, Any]:
-        line_data: dict[str, Any] = {}
-        for i in indices:
-            fieldspec = fieldspecs[i]
-            fieldname = fieldspec[self.iname]
-            cast = fieldspec[self.itype]
-            value = cast(raw_fields[i].decode().strip())
-            if value == "":
-                line_data[fieldname] = None
-            else:
-                line_data[fieldname] = value
-
-        return line_data
+        return encoding
 
     @staticmethod
     def _is_file_like(obj) -> bool:

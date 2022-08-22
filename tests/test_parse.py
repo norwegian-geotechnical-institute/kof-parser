@@ -1,7 +1,7 @@
 import pytest
 
 from ngi_kof_parser import KOFParser
-from ngi_kof_parser import MethodTypeEnum
+from ngi_kof_parser.enums import MethodType
 
 
 class TestParse:
@@ -15,36 +15,38 @@ class TestParse:
             assert location.srid
 
     @pytest.mark.parametrize(
-        "file_name, ex_e, ex_n, ex_z, kof_srid, proj_srid",
+        "file_name, number_of_locations, ex_e, ex_n, ex_z, kof_srid, proj_srid",
         [
             # No transformations
-            ("tests/data/UTM32_EN.kof", 594137.802, 6589107.923, 0.000, 25832, 25832),
-            ("tests/data/UTM32_NE.kof", 594137.802, 6589107.923, 0.000, 25832, 25832),
-            ("tests/data/UTM33_EN.kof", 253851.717, 6595967.833, 0.000, 25833, 25833),
-            ("tests/data/UTM33_NE.kof", 253851.717, 6595967.833, 0.000, 25833, 25833),
+            ("tests/data/UTM32_EN.kof", 1, 594137.802, 6589107.923, 0.000, 25832, 25832),
+            ("tests/data/UTM32_NE.kof", 1, 594137.802, 6589107.923, 0.000, 25832, 25832),
+            ("tests/data/UTM33_EN.kof", 1, 253851.717, 6595967.833, 0.000, 25833, 25833),
+            ("tests/data/UTM33_NE.kof", 1, 253851.717, 6595967.833, 0.000, 25833, 25833),
             # No transformations, read file coordinate system from file
-            ("tests/data/UTM32_EN.kof", 594137.802, 6589107.923, 0.000, None, 25832),
-            ("tests/data/UTM32_NE.kof", 594137.802, 6589107.923, 0.000, None, 25832),
-            ("tests/data/UTM33_EN.kof", 253851.717, 6595967.833, 0.000, None, 25833),
-            ("tests/data/UTM33_NE.kof", 253851.717, 6595967.833, 0.000, None, 25833),
+            ("tests/data/UTM32_EN.kof", 1, 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM32_NE.kof", 1, 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM33_EN.kof", 1, 253851.717, 6595967.833, 0.000, None, 25833),
+            ("tests/data/UTM33_NE.kof", 1, 253851.717, 6595967.833, 0.000, None, 25833),
             # Actual transformation
-            ("tests/data/UTM32_EN.kof", 253851.72, 6595967.83, 0.000, None, 25833),
-            ("tests/data/UTM32_NE.kof", 253851.72, 6595967.83, 0.000, None, 25833),
-            ("tests/data/UTM33_EN.kof", 594137.802, 6589107.923, 0.000, None, 25832),
-            ("tests/data/UTM33_NE.kof", 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM32_EN.kof", 1, 253851.72, 6595967.83, 0.000, None, 25833),
+            ("tests/data/UTM32_NE.kof", 1, 253851.72, 6595967.83, 0.000, None, 25833),
+            ("tests/data/UTM33_EN.kof", 1, 594137.802, 6589107.923, 0.000, None, 25832),
+            ("tests/data/UTM33_NE.kof", 1, 594137.802, 6589107.923, 0.000, None, 25832),
             # Regression test for failed transformation
             # No transformation since the source data is in ETRS89/UTM 32N SRID 25832 (SOSI coordinate system 22)
-            ("tests/data/Innmålt_UTM32.kof", 6644804.528, 595870.665, 50.029, None, 25832),
-            ("tests/data/Innmålt_UTM32.kof", 6644804.528, 595870.665, 50.029, 25832, 25832),
+            ("tests/data/Innmålt_UTM32.kof", 1, 6644804.528, 595870.665, 50.029, None, 25832),
+            ("tests/data/Innmålt_UTM32.kof", 1, 6644804.528, 595870.665, 50.029, 25832, 25832),
             # Transformation from the source data ETRS89/UTM 32N -> UTM 33 (SRID 25833, SOSI 23)
-            ("tests/data/Innmålt_UTM32.kof", 5696353.09, 535410.87, 50.029, None, 25833),
-            ("tests/data/Innmålt_UTM32.kof", 5696353.09, 535410.87, 50.029, 25832, 25833),
+            ("tests/data/Innmålt_UTM32.kof", 1, 5696353.09, 535410.87, 50.029, None, 25833),
+            ("tests/data/Innmålt_UTM32.kof", 1, 5696353.09, 535410.87, 50.029, 25832, 25833),
             # Transformation from the source data ETRS89/UTM 32N -> ED50 UTM 31 (SRID 23031, SOSI 31)
-            ("tests/data/Innmålt_UTM32.kof", 7712335.00, 680539.85, 50.029, None, 23031),
-            ("tests/data/Innmålt_UTM32.kof", 7712335.00, 680539.85, 50.029, 25832, 23031),
+            ("tests/data/Innmålt_UTM32.kof", 1, 7712335.00, 680539.85, 50.029, None, 23031),
+            ("tests/data/Innmålt_UTM32.kof", 1, 7712335.00, 680539.85, 50.029, 25832, 23031),
+            ("tests/data/15-5-18-Fossegata_linux.kof", 6, 6569635.303, 624579.208, 73.838, None, 23031),
+            ("tests/data/15-5-18-Fossegata_windows.kof", 6, 6569635.303, 624579.208, 73.838, None, 23031),
         ],
     )
-    def test_upload_kof_with_proj_and_meta(self, file_name, ex_e, ex_n, ex_z, kof_srid, proj_srid):
+    def test_upload_kof_with_proj_and_meta(self, file_name, number_of_locations, ex_e, ex_n, ex_z, kof_srid, proj_srid):
         """
         Test uploading kof file
 
@@ -55,9 +57,9 @@ class TestParse:
 
         locations = parser.parse(file_name, result_srid=proj_srid, file_srid=kof_srid)
 
-        assert len(locations) == 1
+        assert len(locations) == number_of_locations
 
-        [location] = locations
+        location = locations[0]
         assert location.point_easting == pytest.approx(ex_e)
         assert location.point_northing == pytest.approx(ex_n)
         assert location.point_z == ex_z
@@ -86,7 +88,7 @@ class TestParse:
         assert location2.point_northing == location2_orig_pos_y, "X and Y not swapped"
         assert location2.point_z == location2_orig_pos_z
         for method in location2.methods:
-            assert method == MethodTypeEnum.TOT
+            assert method == MethodType.TOT.value
 
         # 05 SMPLOC7    2413     1217069.560  112901.110  0.000
         locaction7_orig_pos_x = 1217069.560
@@ -99,22 +101,5 @@ class TestParse:
         assert location7.point_z == locaction7_orig_pos_z
 
         for method in location7.methods:
-            assert method == MethodTypeEnum.PZ
+            assert method == MethodType.PZ.value
 
-    @pytest.mark.parametrize(
-        "file, expected_exception",
-        [
-            ("tests/data/15-5-18-Fossegata_linux.kof", ValueError),
-            ("tests/data/15-5-18-Fossegata_windows.kof", UnicodeDecodeError),
-        ],
-    )
-    def test_upload_kof_wrong_encoding(self, file, expected_exception):
-        """
-        Test uploading kof with wrong encoding. Kof only support ASCII (7 bits) for now.
-        """
-        # TODO: Should make the kof parser more resilient to other character sets than 7 bits ASCII
-        srid = 5110  # (ETRS89/NTM10) not knowing that this is correct, but don't care for now
-
-        parser = KOFParser()
-        with pytest.raises(expected_exception):
-            parser.parse(file, srid)

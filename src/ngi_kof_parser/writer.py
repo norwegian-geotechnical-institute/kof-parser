@@ -4,29 +4,29 @@ from uuid import UUID
 
 from ngi_kof_parser import Kof
 from ngi_kof_parser import Location
-from ngi_kof_parser import MethodTypeEnum
+from ngi_kof_parser.enums import MethodType
 from ngi_kof_parser import projector
 
 
 class KOFWriter(Kof):
 
     method_type_to_temakode = {
-        MethodTypeEnum.RO.name: "2251",
-        MethodTypeEnum.RWS.name: "2401",
-        MethodTypeEnum.SA.name: "2402",
-        MethodTypeEnum.TP.name: "2403",
-        MethodTypeEnum.SS.name: "2405",
-        MethodTypeEnum.RP.name: "2406",
-        MethodTypeEnum.CPT.name: "2407",
-        MethodTypeEnum.RS.name: "2409",
-        MethodTypeEnum.SR.name: "2410",
-        MethodTypeEnum.SPT.name: "2411",
-        MethodTypeEnum.RCD.name: "2412",
-        MethodTypeEnum.PZ.name: "2413",
-        MethodTypeEnum.PT.name: "2414",
-        MethodTypeEnum.SVT.name: "2415",
-        MethodTypeEnum.INC.name: "2417",
-        MethodTypeEnum.TOT.name: "2418",
+        MethodType.RO.name: "2251",
+        MethodType.RWS.name: "2401",
+        MethodType.SA.name: "2402",
+        MethodType.TP.name: "2403",
+        MethodType.SS.name: "2405",
+        MethodType.RP.name: "2406",
+        MethodType.CPT.name: "2407",
+        MethodType.RS.name: "2409",
+        MethodType.SR.name: "2410",
+        MethodType.SPT.name: "2411",
+        MethodType.RCD.name: "2412",
+        MethodType.PZ.name: "2413",
+        MethodType.PT.name: "2414",
+        MethodType.SVT.name: "2415",
+        MethodType.INC.name: "2417",
+        MethodType.TOT.name: "2418",
     }
 
     def __init__(self):
@@ -83,7 +83,7 @@ class KOFWriter(Kof):
         kof_string = self.create_kof_header_lines(project_id=project_id, project_name=project_name, srid=srid)
         kof_string += self.create_admin_block(project_name, srid=srid, swap_easting_northing=swap_easting_northing)
         for location in locations:
-
+            location.name = location.name if not None else ""
             z = location.point_z or 0
             x = location.point_easting or 0
             y = location.point_northing or 0
@@ -93,7 +93,7 @@ class KOFWriter(Kof):
             if swap_easting_northing:
                 x, y = y, x
 
-            if len(location.methods) > 0:
+            if location.methods:
                 for method in location.methods:
                     kof_string += self.create_kof_coordinate_block(
                         id=location.name,
