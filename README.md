@@ -31,21 +31,20 @@ parser = KOFParser()
 
 # ETRS89/NTM10:
 srid = 5110
-# Please note that the parser do not handle any coordinate system transformations,
-# so you need to use the same input and output SRIDs (for now).
+
 locations = parser.parse('tests/data/test.kof', result_srid=srid, file_srid=srid)
 
 for location in locations:
    print(location)
 
 # Output:
-# name='SMPLOC1' point_easting=112892.81 point_northing=1217083.64 point_z=1.0 srid=5110 methods=[]
-# name='SMPLOC2' point_easting=112893.15 point_northing=1217079.46 point_z=2.0 srid=5110 methods=['TOT']
-# name='SMPLOC3' point_easting=112891.88 point_northing=1217073.01 point_z=0.0 srid=5110 methods=['CPT']
-# name='SMPLOC4' point_easting=112891.9 point_northing=1217067.54 point_z=0.0 srid=5110 methods=['RP']
-# name='SMPLOC5' point_easting=112902.92 point_northing=1217074.73 point_z=0.0 srid=5110 methods=['SA']
-# name='SMPLOC6' point_easting=112901.11 point_northing=1217069.56 point_z=0.0 srid=5110 methods=['PZ']
-# name='SMPLOC7' point_easting=1217069.56 point_northing=112901.11 point_z=0.0 srid=5110 methods=['PZ']
+# name='SMPLOC1' methods=[] point_easting=112892.81 point_northing=1217083.64 point_z=1.0 srid=5110
+# name='SMPLOC2' methods=['TOT'] point_easting=112893.15 point_northing=1217079.46 point_z=2.0 srid=5110
+# name='SMPLOC3' methods=['CPT'] point_easting=112891.88 point_northing=1217073.01 point_z=0.0 srid=5110
+# name='SMPLOC4' methods=['RP'] point_easting=112891.9 point_northing=1217067.54 point_z=0.0 srid=5110
+# name='SMPLOC5' methods=['SA'] point_easting=112902.92 point_northing=1217074.73 point_z=0.0 srid=5110
+# name='SMPLOC6' methods=['PZ'] point_easting=112901.11 point_northing=1217069.56 point_z=0.0 srid=5110
+# name='SMPLOC7' methods=['PZ'] point_easting=1217069.56 point_northing=112901.11 point_z=0.0 srid=5110
 
 ```
 
@@ -71,12 +70,12 @@ print(kof_string)
 # 00 KOF Export from NGI Field Manager
 # 00 Project: project_id. Name: cool-name
 # 00 Spatial Reference ID (SRID): 5110
-# 00 Export date (UTC): 2022-02-17 13:23:43.204875
+# 00 Export date (UTC): 2022-08-22 13:49:44.394607
 # 00 Oppdrag      Dato     Ver K.sys   Komm $21100000000 Observer    
-# 01 cool-name    17022022   1     210      $21100000000             
-# 05 SMPLOC1             112892.810   1217083.640 1.000                
-# 05 SMPLOC2    2418     112893.150   1217079.460 2.000                
-# 05 SMPLOC3    2407     112891.880   1217073.010 0.000                
+# 01 cool-name    22082022   1     210      $11100000000             
+# 05 SMPLOC1             1217083.640  112892.810  1.000                
+# 05 SMPLOC2    2418     1217079.460  112893.150  2.000                
+# 05 SMPLOC3    2407     1217073.010  112891.880  0.000                
 ```
 
 # Getting Started developing
