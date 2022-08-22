@@ -2,11 +2,8 @@
 This is the parser service.
 """
 from io import BytesIO, TextIOWrapper
-from typing import List, Dict, Optional, Any, Union, overload
-from typing_extensions import Literal
-import struct
-from operator import itemgetter
-import cchardet as chardet
+from typing import List, Dict, Optional, Any
+import cchardet as chardet  # type: ignore
 
 from ngi_projector import Projector
 
@@ -79,11 +76,10 @@ class KOFParser(Kof):
 
         return self.tema_codes_mapping[code].name
 
-
     def map_line_to_coordinate_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> Location:
         resolved_location = Location()
         template_coordinate_block: str = "-05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM"
-        parsed_line = line[0: len(template_coordinate_block)]
+        parsed_line = line[0 : len(template_coordinate_block)]
 
         resolved_location.name = parsed_line[4:15].strip()
         resolved_location.srid = result_srid
@@ -96,10 +92,9 @@ class KOFParser(Kof):
 
         return resolved_location
 
-
     def map_line_to_administrative_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> None:
         template_admin_block: str = "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
-        parsed_line = line[0: len(template_admin_block)]
+        parsed_line = line[0 : len(template_admin_block)]
         coordinate_system = parsed_line[30:38].strip()
         if coordinate_system and not file_srid:
             self.file_srid = self.get_srid(int(coordinate_system))
