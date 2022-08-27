@@ -5,11 +5,11 @@ from io import BytesIO, TextIOWrapper
 from typing import List, Dict, Optional, Any
 import cchardet as chardet  # type: ignore
 
-from ngi_projector import Projector
+from coordinate_projector import Projector
 
-from ngi_kof_parser import Kof
-from ngi_kof_parser.model import Location
-from ngi_kof_parser.enums import MethodType
+from kof_parser import Kof
+from kof_parser.model import Location
+from kof_parser.enums import MethodType
 
 projector = Projector()
 

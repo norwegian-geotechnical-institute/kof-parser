@@ -1,9 +1,9 @@
 import io
 import uuid
 
-from ngi_kof_parser import KOFParser
-from ngi_kof_parser import KOFWriter
-from ngi_kof_parser.enums import MethodType
+from kof_parser import KOFParser
+from kof_parser import KOFWriter
+from kof_parser.enums import MethodType
 
 
 class TestWrite:
@@ -40,9 +40,7 @@ class TestWrite:
         Some (nine) method types does not have a kof code.
         """
         writer = KOFWriter()
-        header = (
-            " 00 KOF sample file from NGI Field Manager\r\n" " 00 Spatial Reference ID (SRID): 5110 (ETRS89/NTM10)\r\n"
-        )
+        header = " 00 KOF sample file from NGI's KOF parser\r\n 00 Spatial Reference ID (SRID): 5110 (ETRS89/NTM10)\r\n"
         location_row = " 05 SMPLOC1             112892.810   1217083.640 1.000                \r\n"
         method_row = " 05 SMPLOC2    %s     112893.150   1217079.460 2.000                \r\n"
         method_rows = ""

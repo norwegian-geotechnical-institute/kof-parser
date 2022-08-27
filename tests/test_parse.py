@@ -1,7 +1,7 @@
 import pytest
 
-from ngi_kof_parser import KOFParser
-from ngi_kof_parser.enums import MethodType
+from kof_parser import KOFParser
+from kof_parser.enums import MethodType
 
 
 class TestParse:
@@ -102,4 +102,3 @@ class TestParse:
 
         for method in location7.methods:
             assert method == MethodType.PZ.value
-

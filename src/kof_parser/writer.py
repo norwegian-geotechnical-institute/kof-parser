@@ -2,10 +2,10 @@ from typing import List, Optional
 from datetime import datetime
 from uuid import UUID
 
-from ngi_kof_parser import Kof
-from ngi_kof_parser import Location
-from ngi_kof_parser.enums import MethodType
-from ngi_kof_parser import projector
+from kof_parser import Kof
+from kof_parser import Location
+from kof_parser.enums import MethodType
+from kof_parser import projector
 
 
 class KOFWriter(Kof):
