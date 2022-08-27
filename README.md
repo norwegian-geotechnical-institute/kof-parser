@@ -1,4 +1,4 @@
-# NGI KOF Parser
+# KOF Parser
 
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 [![security: safety](https://img.shields.io/badge/security-safety-yellow.svg)](https://github.com/pyupio/safety)
@@ -7,8 +7,7 @@
 [![python](https://img.shields.io/badge/Python-3.9-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
 
-
-Python package for parsing KOF files.
+Python package for parsing and generating KOF files.
 
 References:
 
@@ -22,9 +21,7 @@ Latest releases see [CHANGES.md](https://github.com/norwegian-geotechnical-insti
 # Installation (end user) 
 
 ```bash
-
 pip install kof-parser
-
 ```
 
 ## Basic usage
@@ -57,6 +54,8 @@ for location in locations:
 
 ### Write a kof file
 
+To write a KOF file you need to build up a model of locations and methods.
+
 ```python
 from kof_parser import KOFWriter
 from kof_parser import Location
@@ -87,12 +86,6 @@ print(kof_string)
 
 # Getting Started developing
 
-1. Software dependencies
-
-2. Clone this repository
-
-3. Install
-
 ## Software dependencies
 
 Before you start, install:
@@ -120,7 +113,6 @@ Then, from the project root folder run:
 
 Run in the project root folder: 
 
-    poetry install
     poetry run pytest 
 
 Build the package wheel: 
