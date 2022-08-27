@@ -14,29 +14,39 @@ exclude = '''
 '''
 
 [tool.poetry]
-name = "ngi-kof-parser"
-version = "0.0.6"
-description = "Parser of KOF files. Follows Norkart's KOF 2.0 specification from 2005."
-authors = ["Jostein Leira <jostein@leira.net>"]
+name = "kof-parser"
+version = "0.0.8"
+description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
+license = "MIT"
+authors = ["Jostein Leira <jostein@leira.net>", "Magnus Mariero <magnus@neate.no>"]
+maintainers = ["Jostein Leira <jostein@leira.net>", "Magnus Mariero <magnus@neate.no>"]
 readme = "README.md"
+homepage = "https://ngi.no"
+repository = "https://github.com/norwegian-geotechnical-institute/kof-parser"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+packages = [
+    { include = "kof_parser", from="src" },
+]
 
-[[tool.poetry.source]]
-name = "ngi-fm"
-url = "https://pkgs.dev.azure.com/ngi001/277b2f77-691a-4d92-bd89-8e7cac121676/_packaging/fieldmanager/pypi/simple/"
-secondary = true
 
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = "^1.9.0"
-ngi-projector = "^0.0.3"
+coordinate-projector = "^0.0.4"
+cchardet = "^2.1.7"
 
 [tool.poetry.dev-dependencies]
 black = "*"
 pytest = "*"
 pytest-cov = "*"
-pytest-azurepipelines = "*"
 mypy = "*"
 bandit = "*"
+safety = "*"
+pip-licenses = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

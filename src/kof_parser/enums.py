@@ -1,0 +1,27 @@
+import enum
+
+
+class MethodType(enum.Enum):
+    CPT = "CPT"
+    TOT = "TOT"
+    RP = "RP"
+    SA = "SA"
+    PZ = "PZ"
+    SS = "SS"
+    RWS = "RWS"
+    RCD = "RCD"
+    RS = "RS"
+    SVT = "SVT"
+    SPT = "SPT"
+    CD = "CD"
+    TP = "TP"
+    PT = "PT"
+    ESA = "ESA"
+    EP = "EP"
+    AD = "AD"
+    RO = "RO"
+    INC = "INC"
+    SR = "SR"
+    IW = "IW"
+    DT = "DT"
+    OTHER = "OTHER"

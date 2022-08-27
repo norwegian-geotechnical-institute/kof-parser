@@ -1,5 +1,20 @@
 # NGI Python KOF Parser Package
 
+## Version 0.0.8
+_2022-08-22_
+
+Add
+
+- Refractoring to support most encodings in input files.
+
+## Version 0.0.7
+_2022-04-20_
+
+Add
+
+- Transformation of coordinates in output file.
+- Add support for swapping easting and northing in the input or output kof file.
+
 ## Version 0.0.6
 _2022-03-02_
 
