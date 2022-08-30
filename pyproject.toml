@@ -18,10 +18,10 @@ name = "kof-parser"
 version = "0.0.8"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 license = "MIT"
-authors = ["Jostein Leira <jostein@leira.net>", "Magnus Mariero <magnus@neate.no>"]
+authors = ["Magnus Mariero <magnus@neate.no>", "Jostein Leira <jostein@leira.net>"]
 maintainers = ["Jostein Leira <jostein@leira.net>", "Magnus Mariero <magnus@neate.no>"]
 readme = "README.md"
-homepage = "https://ngi.no"
+homepage = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 repository = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
