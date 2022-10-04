@@ -34,8 +34,8 @@ packages = [
 
 
 [tool.poetry.dependencies]
-python = "^3.9"
-pydantic = "^1.9.0"
+python = ">=3.9,<3.11"
+pydantic = "^1.10.2"
 coordinate-projector = "^0.0.4"
 cchardet = "^2.1.7"
 
