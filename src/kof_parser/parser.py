@@ -85,7 +85,7 @@ class KOFParser(Kof):
         resolved_location.srid = result_srid
         resolved_location.point_easting = float(parsed_line[24:37].strip())
         resolved_location.point_northing = float(parsed_line[37:49].strip())
-        resolved_location.point_z = float(parsed_line[49:58].strip())
+        resolved_location.point_z = float(parsed_line[49:58].strip()) if parsed_line[49:58].strip() else None
         new_method = self.tema_code_to_method(parsed_line[15:24].strip())
         if resolved_location.methods is not None:
             resolved_location.methods += [new_method] if new_method is not None else []
@@ -146,8 +146,8 @@ class KOFParser(Kof):
     def _read_kof(
         self, file: BytesIO, result_srid: int, file_srid: Optional[int], swap_easting_northing: Optional[bool] = False
     ) -> List[Location]:
-        locations: Dict[str, Location] = {}
-        resolved_locations: List[Location] = []
+        locations: dict[str, Location] = dict()
+        resolved_locations: list[Location] = []
         if file_srid:
             self.file_srid = file_srid
         else:
