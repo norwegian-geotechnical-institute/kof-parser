@@ -1,5 +1,12 @@
 # NGI Python KOF Parser Package
 
+## Version 0.0.9
+_2022-10-04_
+
+Fix
+
+- If a location had Z (height) empty, then parser crashed. Now fixed.
+
 ## Version 0.0.8
 _2022-08-22_
 
