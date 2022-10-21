@@ -1,5 +1,12 @@
 # NGI Python KOF Parser Package
 
+## Version 0.0.10
+_2022-10-21_
+
+Change
+
+- Upgrade packages.
+
 ## Version 0.0.9
 _2022-10-04_
 

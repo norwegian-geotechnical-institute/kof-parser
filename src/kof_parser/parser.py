@@ -2,7 +2,7 @@
 This is the parser service.
 """
 from io import BytesIO, TextIOWrapper
-from typing import List, Dict, Optional, Any
+from typing import Optional, Any
 import cchardet as chardet  # type: ignore
 
 from coordinate_projector import Projector
@@ -114,7 +114,7 @@ class KOFParser(Kof):
         result_srid: int,
         file_srid: Optional[int] = None,
         swap_easting_northing: Optional[bool] = False,
-    ) -> List[Location]:
+    ) -> list[Location]:
         """
         Parse passed kof file. Resulting locations are returned in the `result_srid` coordinate system.
 
@@ -145,7 +145,7 @@ class KOFParser(Kof):
 
     def _read_kof(
         self, file: BytesIO, result_srid: int, file_srid: Optional[int], swap_easting_northing: Optional[bool] = False
-    ) -> List[Location]:
+    ) -> list[Location]:
         locations: dict[str, Location] = dict()
         resolved_locations: list[Location] = []
         if file_srid:

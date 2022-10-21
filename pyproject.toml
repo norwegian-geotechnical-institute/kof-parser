@@ -15,7 +15,7 @@ exclude = '''
 
 [tool.poetry]
 name = "kof-parser"
-version = "0.0.9"
+version = "0.0.10"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 license = "MIT"
 authors = ["Magnus Mariero <magnus@neate.no>", "Jostein Leira <jostein@leira.net>"]
@@ -36,7 +36,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
 pydantic = "^1.10.2"
-coordinate-projector = "^0.0.4"
+coordinate-projector = "^0.0.5"
 cchardet = "^2.1.7"
 
 [tool.poetry.dev-dependencies]
