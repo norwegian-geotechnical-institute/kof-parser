@@ -3,8 +3,8 @@ This is the parser service.
 """
 from io import BytesIO, TextIOWrapper
 from typing import Optional, Any
-import cchardet as chardet  # type: ignore
 
+from charset_normalizer import detect
 from coordinate_projector import Projector
 
 from kof_parser import Kof
@@ -200,11 +200,12 @@ class KOFParser(Kof):
         self, file: BytesIO, default_char_set: str = "iso-8859-15", confidence: float = 0.70
     ) -> str:
         sample = file.read()
-        detection = chardet.detect(sample)
-        if detection["confidence"] < confidence:
+        detection = detect(sample)
+        detected_confidence = detection.get("confidence", 0.0)
+        if not isinstance(detected_confidence, float) or detected_confidence < confidence:
             encoding = default_char_set
         else:
-            encoding = detection["encoding"]
+            encoding = detection["encoding"] if isinstance(detection["encoding"], str) else default_char_set
         file.seek(0)
         if encoding == "ASCII":
             # Since iso-8859-15 is a superset of ascii, just return that, even if ascii was detected

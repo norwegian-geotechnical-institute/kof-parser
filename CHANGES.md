@@ -1,5 +1,13 @@
 # NGI Python KOF Parser Package
 
+## Version 0.0.11
+_2022-10-21_
+
+Change
+
+- Upgrade packages.
+- Replace the cchardet package with charset-normalizer due to murky licensing.
+
 ## Version 0.0.10
 _2022-10-21_
 
