@@ -39,7 +39,7 @@ class KOFWriter(Kof):
         """
         date = datetime.utcnow().strftime("%d%m%Y")
         version = "1"
-        code = self.get_code(srid=srid)
+        sosi_code = self.get_code(srid=srid) or ""
         municipality = ""
         if swap_easting_northing:
             units = "$21100000000"
@@ -50,7 +50,7 @@ class KOFWriter(Kof):
         #             "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
         admin_block = " 00 Oppdrag      Dato     Ver K.sys   Komm $21100000000 Observer    \n"
         admin_block += (
-            f" 01 {project_name[:12]:<12} {date[:8]:>8} {version[:3]:>3} {code:>7} "
+            f" 01 {project_name[:12]:<12} {date[:8]:>8} {version[:3]:>3} {sosi_code:>7} "
             f"{municipality:>4} {units[:12]:<12} {observer[:12]:<12}\n"
         )
         return admin_block

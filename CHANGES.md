@@ -1,4 +1,15 @@
-# NGI Python KOF Parser Package
+# Python KOF Parser Package
+
+## Version 0.0.12
+_2022-11-02_
+
+Add
+
+- Add missing srid/epsg 3857 and SOSI code 300 for WGS84 Web Mercator / Pseudo-Mercator.  
+
+Fix
+
+- Crash in KOF writer if target srid/epsg has no SOSI definition.
 
 ## Version 0.0.11
 _2022-10-21_
