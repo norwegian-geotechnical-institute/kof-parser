@@ -50,6 +50,7 @@ UTM sone 35 basert på ED50; EPSG 23035;35;23035
 UTM sone 35 basert på EUREF89;Ref INSPIRE Req 7 (ETRS89-TM35))  EPSG 25835;25;25835
 UTM sone 36 basert på ED50; EPSG 23036;36;23036
 UTM sone 36 basert på EUREF89;Ref INSPIRE Req 7 (ETRS89-TM36))  EPSG 25836;26;25836
+Web Mercator / Pseudo-Mercator;Spherical Mercator. Mye brukt projeksjon for webkart, blant annet for Google-maps, OpenStreetMap, Bing, ArcGIS, ESRI. Tidligere bruk benyttet en EPSG:900913.;300;3857
 WGS84 Geografisk 2d;WGS84 Geografisk 2d, ingen projeksjon, EPSG 4326;184;4326
 WGS84 UTM 29 2d;UTM Sone 29 basert på WGS84,2d (horisontal), EPSG 32629;59;32629
 WGS84 UTM 30 2d;UTM Sone 30 basert på WGS84,2d (horisontal), EPSG 32630;60;32630

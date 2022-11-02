@@ -153,7 +153,7 @@ pipenv = ["pipenv"]
 
 [[package]]
 name = "exceptiongroup"
-version = "1.0.0rc9"
+version = "1.0.0"
 description = "Backport of PEP 654 (exception groups)"
 category = "dev"
 optional = false
@@ -522,7 +522,7 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
 name = "timezonefinder"
-version = "6.1.4"
+version = "6.1.6"
 description = "fast python package for finding the timezone of any point on earth (coordinates) offline"
 category = "main"
 optional = false
@@ -852,8 +852,8 @@ dparse = [
     {file = "dparse-0.6.2.tar.gz", hash = "sha256:d45255bda21f998bc7ddf2afd5e62505ba6134756ba2d42a84c56b0826614dfe"},
 ]
 exceptiongroup = [
-    {file = "exceptiongroup-1.0.0rc9-py3-none-any.whl", hash = "sha256:2e3c3fc1538a094aab74fad52d6c33fc94de3dfee3ee01f187c0e0c72aec5337"},
-    {file = "exceptiongroup-1.0.0rc9.tar.gz", hash = "sha256:9086a4a21ef9b31c72181c77c040a074ba0889ee56a7b289ff0afb0d97655f96"},
+    {file = "exceptiongroup-1.0.0-py3-none-any.whl", hash = "sha256:2ac84b496be68464a2da60da518af3785fff8b7ec0d090a581604bc870bdee41"},
+    {file = "exceptiongroup-1.0.0.tar.gz", hash = "sha256:affbabf13fb6e98988c38d9c5650e701569fe3c1de3233cfb61c5f33774690ad"},
 ]
 gitdb = [
     {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
@@ -1188,8 +1188,8 @@ stevedore = [
     {file = "stevedore-4.1.0.tar.gz", hash = "sha256:02518a8f0d6d29be8a445b7f2ac63753ff29e8f2a2faa01777568d5500d777a6"},
 ]
 timezonefinder = [
-    {file = "timezonefinder-6.1.4-cp38-cp38-manylinux_2_31_x86_64.whl", hash = "sha256:6435f290c64178d40d43caecc09a9d3c0d2b5414aa79b9725b1fe739f9cf2cbc"},
-    {file = "timezonefinder-6.1.4.tar.gz", hash = "sha256:6cdbd67d9a41d565afc96b3188005e57f171d0b7fdb31392c7a218f1a84ac0fc"},
+    {file = "timezonefinder-6.1.6-cp38-cp38-manylinux_2_31_x86_64.whl", hash = "sha256:9e2b1c5f6d1df2b2087346e4474141cf8d83c968c78811f1b6023db86909d5f4"},
+    {file = "timezonefinder-6.1.6.tar.gz", hash = "sha256:d2185f82de7809f756e5f2145b766195b9980920d9ad637414944eb9795d8352"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},

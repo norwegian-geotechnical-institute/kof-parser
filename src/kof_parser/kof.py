@@ -28,7 +28,13 @@ class Kof:
         self.code_to_srid_mapping = _code_to_srid_mapping
 
     def get_srid(self, code: int) -> Optional[int]:
+        """
+        Get srid/epsg from SOSI code
+        """
         return self.code_to_srid_mapping.get(code)
 
     def get_code(self, srid: int) -> Optional[int]:
+        """
+        Get SOSI code from srid/epsg
+        """
         return self.srid_to_code_mapping.get(srid)
