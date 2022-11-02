@@ -39,7 +39,7 @@ class KOFWriter(Kof):
         """
         date = datetime.utcnow().strftime("%d%m%Y")
         version = "1"
-        sosi_code = self.get_code(srid=srid) or ''
+        sosi_code = self.get_code(srid=srid) or ""
         municipality = ""
         if swap_easting_northing:
             units = "$21100000000"
