@@ -9,7 +9,6 @@ from kof_parser import projector
 
 
 class KOFWriter(Kof):
-
     method_type_to_temakode = {
         MethodType.RO.name: "2251",
         MethodType.RWS.name: "2401",

@@ -70,25 +70,24 @@ class KOFParser(Kof):
         self.file_srid: Optional[int] = None
 
     def tema_code_to_method(self, code: str) -> Optional[str]:
-
         if not code or code not in self.tema_codes_mapping.keys():
             return None
 
         return self.tema_codes_mapping[code].name
 
     def map_line_to_coordinate_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> Location:
-        resolved_location = Location()
         template_coordinate_block: str = "-05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM"
         parsed_line = line[0 : len(template_coordinate_block)]
 
-        resolved_location.name = parsed_line[4:15].strip()
-        resolved_location.srid = result_srid
-        resolved_location.point_easting = float(parsed_line[24:37].strip())
-        resolved_location.point_northing = float(parsed_line[37:49].strip())
-        resolved_location.point_z = float(parsed_line[49:58].strip()) if parsed_line[49:58].strip() else None
-        new_method = self.tema_code_to_method(parsed_line[15:24].strip())
-        if resolved_location.methods is not None:
-            resolved_location.methods += [new_method] if new_method is not None else []
+        resolved_location = Location(
+            name=parsed_line[4:15].strip(),
+            srid=result_srid,
+            point_easting=float(parsed_line[24:37].strip()),
+            point_northing=float(parsed_line[37:49].strip()),
+            point_z=float(parsed_line[49:58].strip()) if parsed_line[49:58].strip() else None,
+        )
+        if new_method := self.tema_code_to_method(parsed_line[15:24].strip()):
+            resolved_location.methods.append(new_method)
 
         return resolved_location
 

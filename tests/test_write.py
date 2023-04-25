@@ -8,7 +8,6 @@ from kof_parser.enums import MethodType
 
 class TestWrite:
     def test_write(self):
-
         # ETRS89/NTM10:
         srid = 5110
         locations = KOFParser().parse("tests/data/test.kof", srid)
