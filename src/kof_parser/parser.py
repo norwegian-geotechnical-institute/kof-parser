@@ -157,10 +157,10 @@ class KOFParser(Kof):
         wrapper = TextIOWrapper(file, encoding=self.encoding)
         lines = wrapper.readlines()
         for line in lines:
-            if " 01" in line:
+            if line.startswith(" 01 "):
                 self.map_line_to_administrative_block(line, result_srid, file_srid)
 
-            elif " 05" in line:
+            elif line.startswith(" 05 "):
                 location = self.map_line_to_coordinate_block(line, result_srid, file_srid)
 
                 if not self.use_east_north_order_as_default or swap_easting_northing:

@@ -1,5 +1,13 @@
 # Python KOF Parser Package
 
+## Version 0.0.15
+
+_2023-04-25_
+
+Fix
+
+- A bug that skipped lines beginning with " 05" (space, zero, five) that contained " 01" (space, zero, one), is fixed.
+
 ## Version 0.0.14
 
 _2023-03-14_

@@ -91,7 +91,7 @@ print(kof_string)
 Before you start, install:
 
    - Python 3.9 or higher
-   - Poetry
+   - Poetry 1.4.2
    - black code formatter
    
 ## Clone this repository

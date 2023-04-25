@@ -44,6 +44,7 @@ class TestParse:
             ("tests/data/Innmålt_UTM32.kof", 1, 7712335.00, 680539.85, 50.029, 25832, 23031),
             ("tests/data/15-5-18-Fossegata_linux.kof", 6, 6569635.303, 624579.208, 73.838, None, 23031),
             ("tests/data/15-5-18-Fossegata_windows.kof", 6, 6569635.303, 624579.208, 73.838, None, 23031),
+            ("tests/data/KOF_from_ArcGIS.kof", 131, 83711.914, 1193605.427, 5, 5110, 5110),
         ],
     )
     def test_upload_kof_with_proj_and_meta(self, file_name, number_of_locations, ex_e, ex_n, ex_z, kof_srid, proj_srid):
