@@ -161,7 +161,10 @@ class KOFParser(Kof):
                     location = self.map_line_to_coordinate_block(line, result_srid)
 
                     if not self.use_east_north_order_as_default or swap_easting_northing:
-                        location.point_easting, location.point_northing = location.point_northing, location.point_easting
+                        location.point_easting, location.point_northing = (
+                            location.point_northing,
+                            location.point_easting,
+                        )
 
                     if self.file_srid and result_srid != self.file_srid:
                         if location.point_easting and location.point_northing:
