@@ -1,5 +1,13 @@
 # Python KOF Parser Package
 
+## Version 0.0.16
+
+_2023-04-28_
+
+Change
+
+- Fail to parse a KOF file, now raise an exception containing the offending line number in the problem file. 
+
 ## Version 0.0.15
 
 _2023-04-25_
