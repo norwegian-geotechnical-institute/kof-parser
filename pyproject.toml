@@ -15,7 +15,7 @@ exclude = '''
 
 [tool.poetry]
 name = "kof-parser"
-version = "0.0.15"
+version = "0.0.16"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 license = "MIT"
 authors = ["Magnus Mariero <magnus@neate.no>", "Jostein Leira <jostein@leira.net>"]

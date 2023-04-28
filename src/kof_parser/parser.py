@@ -8,6 +8,7 @@ from charset_normalizer import detect
 from coordinate_projector import Projector
 
 from kof_parser import Kof
+from kof_parser.exceptions import ParseError
 from kof_parser.model import Location
 from kof_parser.enums import MethodType
 
@@ -75,37 +76,33 @@ class KOFParser(Kof):
 
         return self.tema_codes_mapping[code].name
 
-    def map_line_to_coordinate_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> Location:
-        template_coordinate_block: str = "-05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM"
-        parsed_line = line[0 : len(template_coordinate_block)]
+    def map_line_to_coordinate_block(self, line: str, result_srid: int) -> Location:
+        # template_coordinate_block: str = "-05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM"
 
         resolved_location = Location(
-            name=parsed_line[4:15].strip(),
+            name=line[4:15].strip(),
             srid=result_srid,
-            point_easting=float(parsed_line[24:37].strip()),
-            point_northing=float(parsed_line[37:49].strip()),
-            point_z=float(parsed_line[49:58].strip()) if parsed_line[49:58].strip() else None,
+            point_easting=float(line[24:37]) if line[24:37].strip() else None,
+            point_northing=float(line[37:49]) if line[37:49].strip() else None,
+            point_z=float(line[49:58]) if line[49:58].strip() else None,
         )
-        if new_method := self.tema_code_to_method(parsed_line[15:24].strip()):
+        if new_method := self.tema_code_to_method(line[15:24].strip()):
             resolved_location.methods.append(new_method)
 
         return resolved_location
 
-    def map_line_to_administrative_block(self, line: str, result_srid: int, file_srid: Optional[int]) -> None:
-        template_admin_block: str = "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
-        parsed_line = line[0 : len(template_admin_block)]
-        coordinate_system = parsed_line[30:38].strip()
+    def map_line_to_administrative_block(self, line: str, file_srid: Optional[int]) -> None:
+        # template_admin_block: str = "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
+        coordinate_system = line[30:38].strip()
         if coordinate_system and not file_srid:
             self.file_srid = self.get_srid(int(coordinate_system))
-        units = parsed_line[43:56]
+        units = line[43:56]
         if units:
             dir_spec = units[1:2]
             if dir_spec == "1":
                 self.use_east_north_order_as_default = False
             elif dir_spec == "2":
                 self.use_east_north_order_as_default = True
-
-        return
 
     def parse(
         self,
@@ -154,44 +151,50 @@ class KOFParser(Kof):
 
         self.encoding = self.detect_char_set_from_file(file)
         wrapper = TextIOWrapper(file, encoding=self.encoding)
-        lines = wrapper.readlines()
-        for line in lines:
-            if line.startswith(" 01 "):
-                self.map_line_to_administrative_block(line, result_srid, file_srid)
 
-            elif line.startswith(" 05 "):
-                location = self.map_line_to_coordinate_block(line, result_srid, file_srid)
+        for line_number, line in enumerate(wrapper.readlines(), start=1):
+            try:
+                if line.startswith(" 01 "):
+                    self.map_line_to_administrative_block(line, file_srid)
 
-                if not self.use_east_north_order_as_default or swap_easting_northing:
-                    location.point_easting, location.point_northing = location.point_northing, location.point_easting
+                elif line.startswith(" 05 "):
+                    location = self.map_line_to_coordinate_block(line, result_srid)
 
-                if self.file_srid and result_srid != self.file_srid:
-                    if location.point_easting and location.point_northing:
-                        location.point_easting, location.point_northing = projector.transform(
-                            self.file_srid, result_srid, location.point_easting, location.point_northing
+                    if not self.use_east_north_order_as_default or swap_easting_northing:
+                        location.point_easting, location.point_northing = (
+                            location.point_northing,
+                            location.point_easting,
                         )
 
-                if len(resolved_locations) > 0:
-                    existing_locations = list(
-                        filter(lambda existing: location.name == existing.name, resolved_locations)
-                    )
-                    if len(existing_locations) > 0:
-                        existing_location = next(
-                            existing_location
-                            for existing_location in existing_locations
-                            if existing_location.name == location.name
+                    if self.file_srid and result_srid != self.file_srid:
+                        if location.point_easting and location.point_northing:
+                            location.point_easting, location.point_northing = projector.transform(
+                                self.file_srid, result_srid, location.point_easting, location.point_northing
+                            )
+
+                    if len(resolved_locations) > 0:
+                        existing_locations = list(
+                            filter(lambda existing: location.name == existing.name, resolved_locations)
                         )
-                        if existing_location is not None:
-                            if existing_location.methods is None:
-                                existing_location.methods = []
-                            existing_location.methods += location.methods if location.methods is not None else []
-                            existing_location.point_easting = location.point_easting
-                            existing_location.point_northing = location.point_northing
-                            existing_location.point_z = location.point_z
+                        if len(existing_locations) > 0:
+                            existing_location = next(
+                                existing_location
+                                for existing_location in existing_locations
+                                if existing_location.name == location.name
+                            )
+                            if existing_location is not None:
+                                if existing_location.methods is None:
+                                    existing_location.methods = []
+                                existing_location.methods += location.methods if location.methods is not None else []
+                                existing_location.point_easting = location.point_easting
+                                existing_location.point_northing = location.point_northing
+                                existing_location.point_z = location.point_z
+                        else:
+                            resolved_locations.append(location)
                     else:
                         resolved_locations.append(location)
-                else:
-                    resolved_locations.append(location)
+            except Exception as e:
+                raise ParseError(f"Error parsing KOF file on line {line_number} - {e}")
 
         return resolved_locations
 
