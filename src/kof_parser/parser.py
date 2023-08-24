@@ -142,7 +142,6 @@ class KOFParser(Kof):
     def _read_kof(
         self, file: BytesIO, result_srid: int, file_srid: Optional[int], swap_easting_northing: Optional[bool] = False
     ) -> list[Location]:
-        locations: dict[str, Location] = dict()
         resolved_locations: list[Location] = []
         if file_srid:
             self.file_srid = file_srid

@@ -62,7 +62,7 @@ class KOFWriter(Kof):
 
     @staticmethod
     def create_kof_header_lines(project_id: UUID, project_name, srid: int) -> str:
-        header = f" 00 KOF Export from NGI Field Manager\n"
+        header = " 00 KOF Export from NGI Field Manager\n"
         header += f" 00 Project: {project_id}. Name: {project_name}\n"
         header += f" 00 Spatial Reference ID (SRID): {srid}\n"
         header += f" 00 Export date (UTC): {datetime.utcnow()}\n"
