@@ -13,9 +13,13 @@ exclude = '''
 )/
 '''
 
+[tool.ruff]
+line-length = 120
+src = ["src", "tests"]
+
 [tool.poetry]
 name = "kof-parser"
-version = "0.0.17"
+version = "0.0.18"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 license = "MIT"
 authors = ["Magnus Mariero <magnus@neate.no>", "Jostein Leira <jostein@leira.net>"]
@@ -35,11 +39,11 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4"
-pydantic = "^1.10.2"
-coordinate-projector = "^0.0.8"
+pydantic = "^1.10.7"
+coordinate-projector = ">=0.0.9"
 charset-normalizer = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "*"
 pytest = "*"
 pytest-cov = "*"
@@ -47,6 +51,7 @@ mypy = "*"
 bandit = "*"
 safety = "*"
 pip-licenses = "*"
+ruff = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

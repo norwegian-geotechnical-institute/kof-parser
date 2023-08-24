@@ -1,8 +1,15 @@
 # Python KOF Parser Package
 
+## Version 0.0.18
+_2023-08-24_
+
+Change
+
+- Update packages
+
 ## Version 0.0.17
 
-_2023-05-16
+_2023-05-16_
 
 Change
 
