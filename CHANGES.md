@@ -1,5 +1,12 @@
 # Python KOF Parser Package
 
+## Version 0.0.19
+_2023-10-04_
+
+Fix
+
+- Fix a bug in the KOF writer format (output). Now right align the coordinate numbers in the coordinate block (05).
+
 ## Version 0.0.18
 _2023-08-24_
 

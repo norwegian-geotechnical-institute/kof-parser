@@ -56,8 +56,16 @@ class KOFWriter(Kof):
 
     @staticmethod
     def create_kof_coordinate_block(id: str, temakode: str, x: float, y: float, z: float) -> str:
-        coord_block = f" 05 {id[0:10]:<10} {temakode:<8} {y:<12.3f} {x:<11.3f} {z:<8.3f} "
+        """
+        Example:
+
+        -05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM
+
+        Some equipment is depending on the coordinates (X, Y and Z) to be right aligned.
+        """
+        coord_block = f" 05 {id[0:10]:<10} {temakode:<8} {y:>12.3f} {x:>11.3f} {z:>8.3f} "
         coord_block = f"{coord_block:<70}\n"
+
         return coord_block
 
     @staticmethod

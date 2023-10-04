@@ -19,11 +19,11 @@ src = ["src", "tests"]
 
 [tool.poetry]
 name = "kof-parser"
-version = "0.0.18"
+version = "0.0.19"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 license = "MIT"
 authors = ["Magnus Mariero <magnus@neate.no>", "Jostein Leira <jostein@leira.net>"]
-maintainers = ["Jostein Leira <jostein@leira.net>", "Magnus Mariero <magnus@neate.no>"]
+maintainers = ["Jostein Leira <jostein@leira.net>"]
 readme = "README.md"
 homepage = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 repository = "https://github.com/norwegian-geotechnical-institute/kof-parser"
