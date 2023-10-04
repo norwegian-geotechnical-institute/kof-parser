@@ -21,7 +21,7 @@ class TestWrite:
 
         assert "\n 01 " in kof_string, "Administration block present"
         assert "\n 05 " in kof_string, "Coordinate block present"
-        assert "05 SMPLOC2    2418     1217079.460  112893.150  2.000" in kof_string
+        assert " 05 SMPLOC2    2418      1217079.460  112893.150    2.000             " in kof_string
 
         kof_string = KOFWriter().writeKOF(
             project_id=uuid.uuid4(),
@@ -30,7 +30,7 @@ class TestWrite:
             srid=srid,
             swap_easting_northing=True,
         )
-        assert "05 SMPLOC2    2418     112893.150   1217079.460 2.000" in kof_string
+        assert " 05 SMPLOC2    2418       112893.150 1217079.460    2.000             " in kof_string
 
     def test_write_all_method_types(self):
         """
