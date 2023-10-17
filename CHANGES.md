@@ -1,5 +1,12 @@
 # Python KOF Parser Package
 
+## Version 0.1.0
+_2023-10-17_
+
+Change
+
+- Upgrade packages, including Pydantic version "^2.4.2"
+
 ## Version 0.0.19
 _2023-10-04_
 
