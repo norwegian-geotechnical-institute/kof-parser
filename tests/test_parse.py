@@ -106,12 +106,11 @@ class TestParse:
 
     def test_err_file_containing_tabs(self):
 
-        srid = 5110  # (ETRS89/NTM10)
-
+        srid = 5110
         parser = KOFParser()
 
         with pytest.raises(
-                exceptions.ParseError,
-                match="Error parsing KOF file on line 3 - KOF file contains tabs, please convert to spaces.",
+            exceptions.ParseError,
+            match="Error parsing KOF file on line 3 - KOF file contains tabs, please convert to spaces.",
         ):
             parser.parse("tests/data/kof-with-tabs.kof", srid)
