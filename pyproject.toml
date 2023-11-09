@@ -19,7 +19,7 @@ src = ["src", "tests"]
 
 [tool.poetry]
 name = "kof-parser"
-version = "0.1.0"
+version = "0.1.1"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 license = "MIT"
 authors = ["Magnus Mariero <magnus@neate.no>", "Jostein Leira <jostein@leira.net>"]
