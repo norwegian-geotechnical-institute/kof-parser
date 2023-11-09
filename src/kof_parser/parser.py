@@ -78,6 +78,8 @@ class KOFParser(Kof):
 
     def map_line_to_coordinate_block(self, line: str, result_srid: int) -> Location:
         # template_coordinate_block: str = "-05 PPPPPPPPPP KKKKKKKK XXXXXXXX.XXX YYYYYYY.YYY ZZZZ.ZZZ Bk MMMMMMM"
+        if "\t" in line:
+            raise ParseError("KOF file contains tabs, please convert to spaces.")
 
         resolved_location = Location(
             name=line[4:15].strip(),
@@ -93,6 +95,8 @@ class KOFParser(Kof):
 
     def map_line_to_administrative_block(self, line: str, file_srid: Optional[int]) -> None:
         # template_admin_block: str = "-01 OOOOOOOOOOOO DDMMYYYY VVV KKKKKKK KKKK $RVAllllllll OOOOOOOOOOOO"
+        if "\t" in line:
+            raise ParseError("KOF file contains tabs, please convert to spaces.")
         coordinate_system = line[30:38].strip()
         if coordinate_system and not file_srid:
             self.file_srid = self.get_srid(int(coordinate_system))

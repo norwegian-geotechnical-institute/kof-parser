@@ -1,5 +1,12 @@
 # Python KOF Parser Package
 
+## Version 0.1.1
+_2023-11-09_
+
+Add
+
+- Add error message if the KOF file contains TAB characters (not allowed).
+
 ## Version 0.1.0
 _2023-10-17_
 

@@ -1,6 +1,6 @@
 import pytest
 
-from kof_parser import KOFParser
+from kof_parser import KOFParser, exceptions
 from kof_parser.enums import MethodType
 
 
@@ -103,3 +103,15 @@ class TestParse:
 
         for method in location7.methods:
             assert method == MethodType.PZ.value
+
+    def test_err_file_containing_tabs(self):
+
+        srid = 5110  # (ETRS89/NTM10)
+
+        parser = KOFParser()
+
+        with pytest.raises(
+                exceptions.ParseError,
+                match="Error parsing KOF file on line 3 - KOF file contains tabs, please convert to spaces.",
+        ):
+            parser.parse("tests/data/kof-with-tabs.kof", srid)
