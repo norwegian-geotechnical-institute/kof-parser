@@ -2,9 +2,9 @@
 
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 [![security: safety](https://img.shields.io/badge/security-safety-yellow.svg)](https://github.com/pyupio/safety)
-[![code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![code style](https://img.shields.io/badge/style-ruff-41B5BE)](https://github.com/astral-sh/ruff)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![python](https://img.shields.io/badge/Python-3.12-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
 
 Python package for parsing and generating KOF files.
@@ -90,9 +90,9 @@ print(kof_string)
 
 Before you start, install:
 
-   - Python 3.9 or higher
-   - Poetry 1.6.1
-   - black code formatter
+   - Python 3.10 or higher
+   - Poetry 2
+   - Ruff formatter
    
 ## Clone this repository
 

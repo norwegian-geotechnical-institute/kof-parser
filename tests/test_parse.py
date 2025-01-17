@@ -105,7 +105,6 @@ class TestParse:
             assert method == MethodType.PZ.value
 
     def test_err_file_containing_tabs(self):
-
         srid = 5110
         parser = KOFParser()
 

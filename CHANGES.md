@@ -1,5 +1,12 @@
 # Python KOF Parser Package
 
+## Version 0.1.2
+_2025-01-17_
+
+Add
+
+- Add support for all EPSG SRIDs (that the coordinate-projector package supports).
+
 ## Version 0.1.1
 _2023-11-09_
 

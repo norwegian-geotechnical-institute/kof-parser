@@ -55,6 +55,6 @@ class TestWrite:
         [location1, location2] = locations
         assert len(location1.methods) == 0
         assert len(location2.methods) == len(MethodType) + 3 - 7
-        assert (
-            len([method for method in location2.methods if method == "OTHER"]) == 0
-        ), "There are seven methods we do not have a tema code for and are therefore mapped to 2430 OTHER"
+        assert len([method for method in location2.methods if method == "OTHER"]) == 0, (
+            "There are seven methods we do not have a tema code for and are therefore mapped to 2430 OTHER"
+        )

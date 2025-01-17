@@ -1,5 +1,5 @@
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, UTC
 from uuid import UUID
 
 from kof_parser import Kof
@@ -36,7 +36,7 @@ class KOFWriter(Kof):
         # 00 Oppdrag Dato Ver K.sys Komm $11100000000 Observatør
         # 01 EXP          31012022   2      22 0000 $22100000000           NN
         """
-        date = datetime.utcnow().strftime("%d%m%Y")
+        date = datetime.now(UTC).strftime("%d%m%Y")
         version = "1"
         sosi_code = self.get_code(srid=srid) or ""
         municipality = ""
@@ -73,7 +73,7 @@ class KOFWriter(Kof):
         header = " 00 KOF Export from NGI Field Manager\n"
         header += f" 00 Project: {project_id}. Name: {project_name}\n"
         header += f" 00 Spatial Reference ID (SRID): {srid}\n"
-        header += f" 00 Export date (UTC): {datetime.utcnow()}\n"
+        header += f" 00 Export date (UTC): {datetime.now(UTC)}\n"
 
         return header
 
