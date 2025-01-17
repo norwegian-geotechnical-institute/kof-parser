@@ -15,7 +15,7 @@ class TestParse:
             assert location.srid
 
     @pytest.mark.parametrize(
-        "file_name, number_of_locations, ex_e, ex_n, ex_z, kof_srid, proj_srid",
+        "file_name, number_of_locations, expected_easting, expected_northing, expected_z, kof_srid, proj_srid",
         [
             # No transformations
             ("tests/data/UTM32_EN.kof", 1, 594137.802, 6589107.923, 0.000, 25832, 25832),
@@ -39,15 +39,16 @@ class TestParse:
             # Transformation from the source data ETRS89/UTM 32N -> UTM 33 (SRID 25833, SOSI 23)
             ("tests/data/Innmålt_UTM32.kof", 1, 5696353.09, 535410.87, 50.029, None, 25833),
             ("tests/data/Innmålt_UTM32.kof", 1, 5696353.09, 535410.87, 50.029, 25832, 25833),
-            # Transformation from the source data ETRS89/UTM 32N -> ED50 UTM 31 (SRID 23031, SOSI 31)
-            ("tests/data/Innmålt_UTM32.kof", 1, 7712335.00, 680539.85, 50.029, None, 23031),
-            ("tests/data/Innmålt_UTM32.kof", 1, 7712335.00, 680539.85, 50.029, 25832, 23031),
+            # Transformation from the source data ETRS89/UTM 32N -> ED50 UTM 31 (SRID 23031, SOSI 31 NB: 10 m accuracy)
+            ("tests/data/Innmålt_UTM32.kof", 1, 7712388.471459307, 680330.5913208205, 50.029, None, 23031),
+            ("tests/data/Innmålt_UTM32.kof", 1, 7712388.471459307, 680330.5913208205, 50.029, 25832, 23031),
             ("tests/data/15-5-18-Fossegata_linux.kof", 6, 6569635.303, 624579.208, 73.838, None, 23031),
             ("tests/data/15-5-18-Fossegata_windows.kof", 6, 6569635.303, 624579.208, 73.838, None, 23031),
             ("tests/data/KOF_from_ArcGIS.kof", 131, 83711.914, 1193605.427, 5, 5110, 5110),
         ],
     )
-    def test_upload_kof_with_proj_and_meta(self, file_name, number_of_locations, ex_e, ex_n, ex_z, kof_srid, proj_srid):
+    def test_upload_kof_with_proj_and_meta(self, file_name, number_of_locations, expected_easting, expected_northing,
+                                           expected_z, kof_srid, proj_srid):
         """
         Test uploading kof file
 
@@ -61,9 +62,9 @@ class TestParse:
         assert len(locations) == number_of_locations
 
         location = locations[0]
-        assert location.point_easting == pytest.approx(ex_e)
-        assert location.point_northing == pytest.approx(ex_n)
-        assert location.point_z == ex_z
+        assert location.point_easting == pytest.approx(expected_easting)
+        assert location.point_northing == pytest.approx(expected_northing)
+        assert location.point_z == expected_z
         assert location.srid == proj_srid
 
     @pytest.mark.parametrize("file", ["tests/data/import_template.kof", open("tests/data/import_template.kof", "rb")])
