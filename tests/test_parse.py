@@ -47,8 +47,9 @@ class TestParse:
             ("tests/data/KOF_from_ArcGIS.kof", 131, 83711.914, 1193605.427, 5, 5110, 5110),
         ],
     )
-    def test_upload_kof_with_proj_and_meta(self, file_name, number_of_locations, expected_easting, expected_northing,
-                                           expected_z, kof_srid, proj_srid):
+    def test_upload_kof_with_proj_and_meta(
+        self, file_name, number_of_locations, expected_easting, expected_northing, expected_z, kof_srid, proj_srid
+    ):
         """
         Test uploading kof file
 
