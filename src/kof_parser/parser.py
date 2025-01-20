@@ -1,6 +1,7 @@
 """
 This is the parser service.
 """
+
 from io import BytesIO, TextIOWrapper
 from typing import Optional, Any
 

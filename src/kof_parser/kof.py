@@ -1,6 +1,7 @@
 """
 Common super class for the KOFReader() and KOFWriter() classes
 """
+
 import csv
 from pathlib import Path
 from typing import Dict, Optional
