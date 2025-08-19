@@ -33,6 +33,7 @@ jobs:
         poetry-version: ['2.0.1']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
@@ -51,6 +52,8 @@ jobs:
       - name: Run bandit
         run: poetry run bandit .
       - name: Run safety
-        run: poetry run safety check
+        run: poetry run safety --disable-optional-telemetry --stage cicd scan
+        env:
+          SAFETY_API_KEY: $(safety-api-key)
       - name: Check for acceptable licenses
         run: poetry run pip-licenses --allow-only="MIT License;BSD License;Python Software Foundation License;Apache Software License;Mozilla Public License 2.0 (MPL 2.0);The Unlicense (Unlicense);ISC License (ISCL)"
