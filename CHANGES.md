@@ -6,6 +6,7 @@ _2025-01-17_
 Add
 
 - Upgrade packages, no functionality changes.
+- Convert from Poetry to uv.
 
 ## Version 0.1.2
 _2025-01-17_
