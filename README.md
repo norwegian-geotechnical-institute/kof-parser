@@ -91,7 +91,7 @@ print(kof_string)
 Before you start, install:
 
    - Python 3.11 or higher
-   - Poetry 2
+   - uv (see https://docs.astral.sh/uv/)
    - Ruff formatter
    
 ## Clone this repository
@@ -102,22 +102,23 @@ Use git to clone this repository.
 
 There are several combinations of how to set up a local development environment.
 
-We use Poetry for dependency management. See [Install poetry](https://python-poetry.org/docs/) if needed.
+We use uv for dependency management. See the uv docs if needed.
 
 Then, from the project root folder run:
 
-    poetry install
+    uv sync --dev
 
+This will create a virtual environment (by default in .venv) and install all dependencies including dev tools.
 
 # Build and Test
 
-Run in the project root folder: 
+Run tests in the project root folder: 
 
-    poetry run pytest 
+    uv run pytest
 
 Build the package wheel: 
 
-    poetry build
+    uv build
 
 # Contribute
 
