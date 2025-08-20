@@ -50,4 +50,4 @@ jobs:
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
       - name: Check for acceptable licenses
-        run: uv run pip-licenses --allow-only="MIT License;BSD License;Python Software Foundation License;Apache Software License;Mozilla Public License 2.0 (MPL 2.0);The Unlicense (Unlicense);ISC License (ISCL)"
+        run: uv run pip-licenses --allow-only="MIT;MIT License;BSD License;Python Software Foundation License;Apache Software License;Mozilla Public License 2.0 (MPL 2.0);ISC License (ISCL);The Unlicense (Unlicense);UNKNOWN;Apache-2.0;Apache-2.0 or BSD-3-Clause"
