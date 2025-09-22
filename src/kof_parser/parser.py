@@ -154,51 +154,51 @@ class KOFParser(Kof):
             self.file_srid = result_srid
 
         self.encoding = self.detect_char_set_from_file(file)
-        wrapper = TextIOWrapper(file, encoding=self.encoding)
+        with TextIOWrapper(file, encoding=self.encoding) as wrapper:
 
-        for line_number, line in enumerate(wrapper.readlines(), start=1):
-            try:
-                if line.startswith(" 01 "):
-                    self.map_line_to_administrative_block(line, file_srid)
+            for line_number, line in enumerate(wrapper, start=1):
+                try:
+                    if line.startswith(" 01 "):
+                        self.map_line_to_administrative_block(line, file_srid)
 
-                elif line.startswith(" 05 "):
-                    location = self.map_line_to_coordinate_block(line, result_srid)
+                    elif line.startswith(" 05 "):
+                        location = self.map_line_to_coordinate_block(line, result_srid)
 
-                    if not self.use_east_north_order_as_default or swap_easting_northing:
-                        location.point_easting, location.point_northing = (
-                            location.point_northing,
-                            location.point_easting,
-                        )
-
-                    if self.file_srid and result_srid != self.file_srid:
-                        if location.point_easting and location.point_northing:
-                            location.point_easting, location.point_northing = projector.transform(
-                                self.file_srid, result_srid, location.point_easting, location.point_northing
+                        if not self.use_east_north_order_as_default or swap_easting_northing:
+                            location.point_easting, location.point_northing = (
+                                location.point_northing,
+                                location.point_easting,
                             )
 
-                    if len(resolved_locations) > 0:
-                        existing_locations = list(
-                            filter(lambda existing: location.name == existing.name, resolved_locations)
-                        )
-                        if len(existing_locations) > 0:
-                            existing_location = next(
-                                existing_location
-                                for existing_location in existing_locations
-                                if existing_location.name == location.name
+                        if self.file_srid and result_srid != self.file_srid:
+                            if location.point_easting and location.point_northing:
+                                location.point_easting, location.point_northing = projector.transform(
+                                    self.file_srid, result_srid, location.point_easting, location.point_northing
+                                )
+
+                        if len(resolved_locations) > 0:
+                            existing_locations = list(
+                                filter(lambda existing: location.name == existing.name, resolved_locations)
                             )
-                            if existing_location is not None:
-                                if existing_location.methods is None:
-                                    existing_location.methods = []
-                                existing_location.methods += location.methods if location.methods is not None else []
-                                existing_location.point_easting = location.point_easting
-                                existing_location.point_northing = location.point_northing
-                                existing_location.point_z = location.point_z
+                            if len(existing_locations) > 0:
+                                existing_location = next(
+                                    existing_location
+                                    for existing_location in existing_locations
+                                    if existing_location.name == location.name
+                                )
+                                if existing_location is not None:
+                                    if existing_location.methods is None:
+                                        existing_location.methods = []
+                                    existing_location.methods += location.methods if location.methods is not None else []
+                                    existing_location.point_easting = location.point_easting
+                                    existing_location.point_northing = location.point_northing
+                                    existing_location.point_z = location.point_z
+                            else:
+                                resolved_locations.append(location)
                         else:
                             resolved_locations.append(location)
-                    else:
-                        resolved_locations.append(location)
-            except Exception as e:
-                raise ParseError(f"Error parsing KOF file on line {line_number} - {e}")
+                except Exception as e:
+                    raise ParseError(f"Error parsing KOF file on line {line_number} - {e}")
 
         return resolved_locations
 

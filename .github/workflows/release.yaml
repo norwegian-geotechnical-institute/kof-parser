@@ -12,16 +12,17 @@ jobs:
         python-version: ['3.13']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
+    environment: release
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup uv
         uses: astral-sh/setup-uv@v4
       - name: Build distributions
         run: uv build
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
+      - name: Publish package to pypi
+        run: uv publish --repository pypi

@@ -1,5 +1,12 @@
 # Python KOF Parser Package
 
+## Version 0.1.4
+_2025-09-22_
+
+Fix
+
+- Possible memory leak.
+
 ## Version 0.1.3
 _2025-01-17_
 

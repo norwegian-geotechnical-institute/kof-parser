@@ -19,7 +19,7 @@ src = ["src", "tests"]
 
 [project]
 name = "kof-parser"
-version = "0.1.3"
+version = "0.1.4"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 readme = "README.md"
 license = { text = "MIT" }
