@@ -155,7 +155,6 @@ class KOFParser(Kof):
 
         self.encoding = self.detect_char_set_from_file(file)
         with TextIOWrapper(file, encoding=self.encoding) as wrapper:
-
             for line_number, line in enumerate(wrapper, start=1):
                 try:
                     if line.startswith(" 01 "):
@@ -189,7 +188,9 @@ class KOFParser(Kof):
                                 if existing_location is not None:
                                     if existing_location.methods is None:
                                         existing_location.methods = []
-                                    existing_location.methods += location.methods if location.methods is not None else []
+                                    existing_location.methods += (
+                                        location.methods if location.methods is not None else []
+                                    )
                                     existing_location.point_easting = location.point_easting
                                     existing_location.point_northing = location.point_northing
                                     existing_location.point_z = location.point_z
