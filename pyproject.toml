@@ -48,6 +48,7 @@ dev = [
     "mypy",
     "bandit",
     "safety",
+    "typer<0.17", # Safety version 3.6.1 fails with typer>=0.17
     "pip-licenses",
     "ruff",
 ]

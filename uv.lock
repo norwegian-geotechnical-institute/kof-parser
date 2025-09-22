@@ -430,6 +430,7 @@ dev = [
     { name = "pytest-cov" },
     { name = "ruff" },
     { name = "safety" },
+    { name = "typer" },
 ]
 
 [package.metadata]
@@ -448,6 +449,7 @@ dev = [
     { name = "pytest-cov" },
     { name = "ruff" },
     { name = "safety" },
+    { name = "typer", specifier = "<0.17" },
 ]
 
 [[package]]
@@ -1107,7 +1109,7 @@ wheels = [
 
 [[package]]
 name = "typer"
-version = "0.19.1"
+version = "0.16.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1115,9 +1117,9 @@ dependencies = [
     { name = "shellingham" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/03/ea/9cc57c3c627fd7a6a0907ea371019fe74c3ec00e3cf209a6864140a602ad/typer-0.19.1.tar.gz", hash = "sha256:cb881433a4b15dacc875bb0583d1a61e78497806741f9aba792abcab390c03e6", size = 104802, upload-time = "2025-09-20T08:59:22.692Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/78/d90f616bf5f88f8710ad067c1f8705bf7618059836ca084e5bb2a0855d75/typer-0.16.1.tar.gz", hash = "sha256:d358c65a464a7a90f338e3bb7ff0c74ac081449e53884b12ba658cbd72990614", size = 102836, upload-time = "2025-08-18T19:18:22.898Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/fa/6473c00b5eb26a2ba427813107699d3e6f4e1a4afad3f7494b17bdef3422/typer-0.19.1-py3-none-any.whl", hash = "sha256:914b2b39a1da4bafca5f30637ca26fa622a5bf9f515e5fdc772439f306d5682a", size = 46876, upload-time = "2025-09-20T08:59:21.153Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/76/06dbe78f39b2203d2a47d5facc5df5102d0561e2807396471b5f7c5a30a1/typer-0.16.1-py3-none-any.whl", hash = "sha256:90ee01cb02d9b8395ae21ee3368421faf21fa138cb2a541ed369c08cec5237c9", size = 46397, upload-time = "2025-08-18T19:18:21.663Z" },
 ]
 
 [[package]]
