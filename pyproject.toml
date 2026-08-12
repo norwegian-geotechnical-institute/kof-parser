@@ -58,6 +58,10 @@ dev = [
 Homepage = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 Repository = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 
+[tool.uv]
+exclude-newer = "P7D"
+no-build = true
+no-binary-package = ["kof-parser"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kof_parser"]
