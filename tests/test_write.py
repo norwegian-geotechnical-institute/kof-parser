@@ -58,3 +58,34 @@ class TestWrite:
         assert len([method for method in location2.methods if method == "OTHER"]) == 0, (
             "There are seven methods we do not have a tema code for and are therefore mapped to 2430 OTHER"
         )
+
+    def test_write_no_coordinates(self):
+        # ETRS89/NTM10:
+        srid = 5110
+        locations = KOFParser().parse("tests/data/test-no-coordinates.kof", srid)
+
+        # Add unknow/unhandled tema code (OTHER has non)
+        locations[1].methods.append(MethodType.OTHER.name)
+
+        kof_string = KOFWriter().writeKOF(
+            project_id=uuid.uuid4(), project_name="cool-name", locations=locations, srid=srid
+        )
+
+        assert "\n 01 " in kof_string, "Administration block present"
+        assert "\n 05 " in kof_string, "Coordinate block present"
+        assert " 05 SMPLOC1              1217083.640                1.000             " in kof_string
+        assert " 05 SMPLOC2    2418                   112893.150    2.000             " in kof_string
+        assert " 05 SMPLOC3    2407      1217073.010  112891.880                      " in kof_string
+        assert " 05 SMPLOC4    2406                                 0.000             " in kof_string
+        assert " 05 SMPLOC5    2402      1217074.730  112902.920    0.000             " in kof_string
+        assert " 05 SMPLOC6    2402      1217074.730                                  " in kof_string
+        assert " 05 SMPLOC7    2402                                                   " in kof_string
+
+        kof_string = KOFWriter().writeKOF(
+            project_id=uuid.uuid4(),
+            project_name="cool-name",
+            locations=locations,
+            srid=srid,
+            swap_easting_northing=True,
+        )
+        assert " 05 SMPLOC2    2418       112893.150                2.000             " in kof_string

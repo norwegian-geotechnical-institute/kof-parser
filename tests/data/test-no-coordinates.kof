@@ -1,0 +1,9 @@
+ 00 KOF sample file from NGI Field Manager
+ 00 Spatial Reference ID (SRID): 5110 (ETRS89/NTM10)
+ 05 SMPLOC1                          1217083.640 1.000
+ 05 SMPLOC2    2418     112893.150               2.000
+ 05 SMPLOC3    2407     112891.880   1217073.010
+ 05 SMPLOC4    2406                              0.000
+ 05 SMPLOC5    2402     112902.920   1217074.730 0.000
+ 05 SMPLOC6    2402                  1217074.730
+ 05 SMPLOC7    2402
