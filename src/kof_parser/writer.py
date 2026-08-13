@@ -63,8 +63,10 @@ class KOFWriter(Kof):
 
         Some equipment is depending on the coordinates (X, Y and Z) to be right aligned.
         """
-        coord_block = (f" 05 {id[0:10]:<10} {temakode:<8} {f'{y:>12.3f}' if y is not None else '':>12} "
-                       f"{f'{x:>11.3f}' if x is not None else '':>11} {f'{z:>8.3f}' if z is not None else '':>8}")
+        coord_block = (
+            f" 05 {id[0:10]:<10} {temakode:<8} {f'{y:>12.3f}' if y is not None else '':>12} "
+            f"{f'{x:>11.3f}' if x is not None else '':>11} {f'{z:>8.3f}' if z is not None else '':>8}"
+        )
         coord_block = f"{coord_block:<70}\n"
 
         return coord_block
