@@ -91,9 +91,9 @@ class KOFWriter(Kof):
         kof_string += self.create_admin_block(project_name, srid=srid, swap_easting_northing=swap_easting_northing)
         for location in locations:
             location.name = location.name if not None else ""
-            z = location.point_z or 0
-            x = location.point_easting or 0
-            y = location.point_northing or 0
+            z = location.point_z
+            x = location.point_easting
+            y = location.point_northing
             if x and y and srid and location.srid and srid != location.srid:
                 x, y = projector.transform(from_srid=location.srid, to_srid=srid, east=x, north=y)
 

@@ -1,5 +1,12 @@
 # Python KOF Parser Package
 
+## Version 0.1.5
+_2026-08-12_
+
+Fix
+
+- Writing a KOF file for a location with not position, then the resulting file was adding `0.0 0.0`
+
 ## Version 0.1.4
 _2025-09-22_
 
