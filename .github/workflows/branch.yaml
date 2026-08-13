@@ -6,37 +6,37 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12', '3.13']
+        python-version: ['3.11', '3.12', '3.13', '3.14']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v10.0.0
       - name: Install dependencies
         run: uv sync --dev
       - name: Run tests
         run: uv run pytest --cov=./ --cov-report=xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v7
   code-quality:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12', '3.13']
+        python-version: ['3.11', '3.12', '3.13', '3.14']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v10.0.0
       - name: Install dependencies
         run: uv sync --dev
       - name: Run ruff
@@ -50,4 +50,4 @@ jobs:
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
       - name: Check for acceptable licenses
-        run: uv run pip-licenses --allow-only="MIT;MIT License;BSD License;Python Software Foundation License;Apache Software License;Mozilla Public License 2.0 (MPL 2.0);ISC License (ISCL);The Unlicense (Unlicense);UNKNOWN;Apache-2.0;Apache-2.0 or BSD-3-Clause"
+        run: uv run pip-licenses --allow-only="MIT;Python Software Foundation License;Mozilla Public License 2.0 (MPL 2.0);ISC License (ISCL);The Unlicense (Unlicense);UNKNOWN;Apache;BSD;PSF" --partial-match

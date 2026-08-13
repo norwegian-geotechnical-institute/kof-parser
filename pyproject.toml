@@ -19,7 +19,7 @@ src = ["src", "tests"]
 
 [project]
 name = "kof-parser"
-version = "0.1.4"
+version = "0.1.5"
 description = "A KOF file parser. Follows Norkart's KOF 2.0 specification from 2005."
 readme = "README.md"
 license = { text = "MIT" }
@@ -58,6 +58,10 @@ dev = [
 Homepage = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 Repository = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 
+[tool.uv]
+exclude-newer = "P7D"
+no-build = true
+no-binary-package = ["kof-parser"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kof_parser"]

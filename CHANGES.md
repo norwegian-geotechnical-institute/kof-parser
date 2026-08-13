@@ -1,5 +1,13 @@
 # Python KOF Parser Package
 
+## Version 0.1.5
+_2026-08-13_
+
+Fix
+
+- Writing/exporting a KOF file for a location with not position, then the resulting file was adding a position with 
+  zero values instead of empty values. This is now fixed. 
+
 ## Version 0.1.4
 _2025-09-22_
 

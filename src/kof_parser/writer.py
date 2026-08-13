@@ -55,7 +55,7 @@ class KOFWriter(Kof):
         return admin_block
 
     @staticmethod
-    def create_kof_coordinate_block(id: str, temakode: str, x: float, y: float, z: float) -> str:
+    def create_kof_coordinate_block(id: str, temakode: str, x: float | None, y: float | None, z: float | None) -> str:
         """
         Example:
 
@@ -63,7 +63,10 @@ class KOFWriter(Kof):
 
         Some equipment is depending on the coordinates (X, Y and Z) to be right aligned.
         """
-        coord_block = f" 05 {id[0:10]:<10} {temakode:<8} {y:>12.3f} {x:>11.3f} {z:>8.3f} "
+        coord_block = (
+            f" 05 {id[0:10]:<10} {temakode:<8} {f'{y:>12.3f}' if y is not None else '':>12} "
+            f"{f'{x:>11.3f}' if x is not None else '':>11} {f'{z:>8.3f}' if z is not None else '':>8}"
+        )
         coord_block = f"{coord_block:<70}\n"
 
         return coord_block
@@ -91,9 +94,9 @@ class KOFWriter(Kof):
         kof_string += self.create_admin_block(project_name, srid=srid, swap_easting_northing=swap_easting_northing)
         for location in locations:
             location.name = location.name if not None else ""
-            z = location.point_z or 0
-            x = location.point_easting or 0
-            y = location.point_northing or 0
+            z = location.point_z
+            x = location.point_easting
+            y = location.point_northing
             if x and y and srid and location.srid and srid != location.srid:
                 x, y = projector.transform(from_srid=location.srid, to_srid=srid, east=x, north=y)
 
