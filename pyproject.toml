@@ -60,11 +60,12 @@ Repository = "https://github.com/norwegian-geotechnical-institute/kof-parser"
 
 [tool.uv]
 exclude-newer = "P7D"
-no-build = true
-no-binary-package = ["kof-parser"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/kof_parser"]
+include = ["src/kof_parser", "README.md", "CHANGES.md", "LICENSE"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src/kof_parser" = "kof_parser"
 
 [build-system]
 requires = ["hatchling>=1.18"]
